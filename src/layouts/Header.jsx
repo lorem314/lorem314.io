@@ -51,7 +51,8 @@ const Header = ({
   isAlwaysCollapseLeftDrawer,
   handleOpenLeftDrawer,
 }) => {
-  const { toggleIsAlwaysCollapseLeftDrawer } = useGlobalConfig()
+  const { toggleIsAlwaysCollapseLeftDrawer, prefersColorScheme } =
+    useGlobalConfig()
 
   return (
     <Wrapper
@@ -75,6 +76,8 @@ const Header = ({
       <button onClick={toggleIsAlwaysCollapseLeftDrawer}>
         toggleIsAlwaysCollapseLeftDrawer
       </button>
+
+      <span>{prefersColorScheme}</span>
     </Wrapper>
   )
 }
