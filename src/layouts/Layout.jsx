@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 
 import Header from "./Header"
+import Footer from "./Footer"
 import LeftSidebar from "./LeftSidebar"
 import HorizontalDrawer from "../ui/HorizontalDrawer"
 
@@ -10,6 +11,7 @@ import GlobalStyle, {
   leftDrawerWidth,
 } from "../styled/GlobalStyle"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
+import { transition } from "../utils/css"
 
 const Wrapper = styled.div`
   > main {
@@ -32,7 +34,9 @@ const Wrapper = styled.div`
       scroll-behavior: smooth;
       padding: 0 10px;
 
-      /* background-color: #e5e5e5; */
+      color: var(--content-normal-text-color);
+      background-color: var(--page-bg);
+      ${transition("color", "bg")}
     }
   }
 `
@@ -97,14 +101,17 @@ const Layout = ({ children }) => {
             isOpen={isLeftDrawerOpen}
             onClose={handleCloseLeftDrawer}
           >
-            <LeftSidebar />
+            <LeftSidebar isInDrawer={true} />
           </HorizontalDrawer>
         ) : (
-          <LeftSidebar />
+          <LeftSidebar isInDrawer={false} />
         )}
 
         <main>
-          <div className="main-content">{children}</div>
+          <div className="main-content">
+            {children}
+            <Footer />
+          </div>
           {/* <div>isCollapseLeftDrawer - {isCollapseLeftDrawer.toString()}</div>
           <div>isLeftDrawerOpen - {isLeftDrawerOpen.toString()}</div>
           <div>

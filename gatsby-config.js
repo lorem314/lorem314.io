@@ -9,6 +9,7 @@ module.exports = {
   },
   plugins: [
     "gatsby-plugin-styled-components",
+    "gatsby-plugin-dark-mode",
     "gatsby-plugin-image",
     "gatsby-plugin-sitemap",
     {

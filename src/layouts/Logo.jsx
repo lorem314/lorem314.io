@@ -13,6 +13,7 @@ const Wrapper = styled.div`
     > a {
       color: whitesmoke;
       text-decoration: none;
+      font-family: Times, serif; //
 
       &:hover {
         color: white;

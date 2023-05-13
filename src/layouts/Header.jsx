@@ -2,14 +2,18 @@ import React from "react"
 import styled from "styled-components"
 
 import Logo from "./Logo"
-
+import SocialLinks from "./SocialLinks"
+import Theme from "./Theme"
+import SearchModalButton from "./SearchModalButton"
 import MenuIcon from "../svg/MenuIcon"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
+import { transition } from "../utils/css"
 
 const Wrapper = styled.header`
   height: 50px;
-  background-color: darkorchid;
   padding: 0 10px;
+  background-color: var(--header-bg);
+  ${transition("bg")}
 
   display: flex;
   align-items: center;
@@ -21,28 +25,26 @@ const Wrapper = styled.header`
     background: none;
     margin: 0;
     border: none;
+    border-radius: 25%;
     padding: 4px;
     background-color: rgba(0, 0, 0, 0.25);
   }
 
-  .search-modal-btn {
-    background: none;
-    margin: 0;
-    border: none;
-    padding: 0.25em 0.75em;
-    border-radius: 1em;
-    background-color: whitesmoke;
-    &:hover {
-      background-color: white;
-    }
-    .btn-text {
-      font-size: smaller;
-      transform: translateY(1px);
-    }
-    .kbds {
-      /* transform: translateY(-1px); */
-      font-size: smaller;
-    }
+  > div:nth-child(2) {
+    flex: 1 0 auto;
+    gap: 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  > div:nth-child(3) {
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `
 
@@ -63,17 +65,17 @@ const Header = ({
         <MenuIcon size={24} color="white" />
       </button>
 
-      <Logo />
+      <div>
+        <Logo />
+        <SearchModalButton />
+      </div>
 
-      <button className="search-modal-btn">
-        <span className="btn-text">搜索</span>
-        <div className="kbds">
-          <kbd>Ctrl</kbd>
-          <kbd>K</kbd>
-        </div>
-      </button>
+      <div>
+        <SocialLinks />
+        <Theme />
+      </div>
 
-      <button onClick={toggleIsAlwaysCollapseLeftDrawer}>
+      {/* <button onClick={toggleIsAlwaysCollapseLeftDrawer}>
         toggleIsAlwaysCollapseLeftDrawer
       </button>
 

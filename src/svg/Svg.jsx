@@ -10,6 +10,7 @@ const Svg = styled.svg.attrs({
 
   .icon {
     fill: ${({ color }) => color || "var(--svg-icon-color)"};
+    transition: fill var(--theme-transition-props);
   }
 `
 
