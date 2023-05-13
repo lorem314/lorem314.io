@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import styled from "styled-components"
 
@@ -42,6 +42,7 @@ const PortalWrapper = styled.div`
 `
 
 const Portal = ({ position, onClose, width, children }) => {
+  const refPortal = useRef(null)
   const [styles, setStyles] = useState({
     offsetX: calcOffsetX(position),
     opacity: 0,
@@ -77,7 +78,9 @@ const Portal = ({ position, onClose, width, children }) => {
         }}
         onClick={stopPropagation}
       >
-        {React.cloneElement(children, {})}
+        {React.cloneElement(children, {
+          onCloseDrawer: closeDrawer,
+        })}
       </div>
     </PortalWrapper>,
     document.body
