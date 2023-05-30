@@ -19,6 +19,10 @@ const Wrapper = styled.header`
   align-items: center;
   gap: 10px;
 
+  @media screen and (max-width: 1080px) {
+    padding-right: ${({ hasRightDrawer }) => (hasRightDrawer ? 50 : 10)}px;
+  }
+
   .left-drawer-btn {
     display: ${({ isCollapseLeftDrawer, isAlwaysCollapseLeftDrawer }) =>
       isAlwaysCollapseLeftDrawer || isCollapseLeftDrawer ? "initial" : "none"};
@@ -28,6 +32,12 @@ const Wrapper = styled.header`
     border-radius: 25%;
     padding: 4px;
     background-color: rgba(0, 0, 0, 0.25);
+
+    &:focus-visible {
+      outline-width: 2px;
+      outline-style: solid;
+      outline-color: var(--link-color);
+    }
   }
 
   > div:nth-child(2) {
@@ -52,6 +62,7 @@ const Header = ({
   isCollapseLeftDrawer,
   isAlwaysCollapseLeftDrawer,
   handleOpenLeftDrawer,
+  hasRightDrawer,
 }) => {
   const { toggleIsAlwaysCollapseLeftDrawer, prefersColorScheme } =
     useGlobalConfig()
@@ -60,6 +71,7 @@ const Header = ({
     <Wrapper
       isCollapseLeftDrawer={isCollapseLeftDrawer}
       isAlwaysCollapseLeftDrawer={isAlwaysCollapseLeftDrawer}
+      hasRightDrawer={hasRightDrawer}
     >
       <button className="left-drawer-btn" onClick={handleOpenLeftDrawer}>
         <MenuIcon size={24} color="white" />
@@ -74,12 +86,6 @@ const Header = ({
         <SocialLinks />
         <Theme />
       </div>
-
-      {/* <button onClick={toggleIsAlwaysCollapseLeftDrawer}>
-        toggleIsAlwaysCollapseLeftDrawer
-      </button>
-
-      <span>{prefersColorScheme}</span>
     </Wrapper>
   )
 }

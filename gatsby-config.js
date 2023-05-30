@@ -10,6 +10,14 @@ module.exports = {
   plugins: [
     "gatsby-plugin-styled-components",
     "gatsby-plugin-dark-mode",
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `published`,
+        path: `${__dirname}/published/`,
+      },
+      __key: "published",
+    },
     "gatsby-plugin-image",
     "gatsby-plugin-sitemap",
     {

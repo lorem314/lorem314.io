@@ -4,7 +4,7 @@ import styled from "styled-components"
 import Header from "./Header"
 import Footer from "./Footer"
 import LeftSidebar from "./LeftSidebar"
-import HorizontalDrawer from "../ui/HorizontalDrawer"
+import Drawer from "../ui/Drawer"
 
 import GlobalStyle, {
   bpCollapseLeftDrawer,
@@ -41,7 +41,7 @@ const Wrapper = styled.div`
   }
 `
 
-const Layout = ({ children }) => {
+const Layout = ({ children, hasRightDrawer = false }) => {
   const { isAlwaysCollapseLeftDrawer } = useGlobalConfig()
   const [isCollapseLeftDrawer, setIsCollapseLeftDrawer] = useState(() => {
     return (
@@ -93,16 +93,17 @@ const Layout = ({ children }) => {
           isCollapseLeftDrawer={isCollapseLeftDrawer}
           isAlwaysCollapseLeftDrawer={isAlwaysCollapseLeftDrawer}
           handleOpenLeftDrawer={handleOpenLeftDrawer}
+          hasRightDrawer={hasRightDrawer}
         />
 
         {isAlwaysCollapseLeftDrawer || isCollapseLeftDrawer ? (
-          <HorizontalDrawer
+          <Drawer
             width={leftDrawerWidth}
             isOpen={isLeftDrawerOpen}
             onClose={handleCloseLeftDrawer}
           >
             <LeftSidebar isInDrawer={true} />
-          </HorizontalDrawer>
+          </Drawer>
         ) : (
           <LeftSidebar isInDrawer={false} />
         )}

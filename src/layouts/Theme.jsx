@@ -6,8 +6,8 @@ const Wrapper = styled.div`
   border-radius: ${({ size }) => size}px;
 
   :focus-within {
-    outline-offset: 1px;
-    outline: 2px solid white;
+    /* outline-offset: 1px; */
+    outline: 2px solid var(--link-color);
   }
 
   > label {

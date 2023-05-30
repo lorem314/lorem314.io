@@ -20,6 +20,11 @@ const Wrapper = styled.button`
   &:hover {
     background-color: white;
   }
+  &:focus-visible {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: var(--link-color);
+  }
 
   .btn-label {
     flex: 1 0 auto;

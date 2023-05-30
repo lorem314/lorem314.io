@@ -45,6 +45,12 @@ const Wrapper = styled.div`
       border-radius: 25%;
       background-color: rgba(0, 0, 0, 0.25);
       ${transition("bg")}
+
+      &:focus-visible {
+        outline-width: 2px;
+        outline-style: solid;
+        outline-color: var(--link-color);
+      }
     }
   }
 
@@ -73,6 +79,11 @@ const Wrapper = styled.div`
       > a:hover {
         --svg-icon-color: var(--svg-icon-color-hover);
         background-color: var(--svg-icon-bg-hover);
+      }
+      > a:focus-visible {
+        outline-width: 2px;
+        outline-style: solid;
+        outline-color: var(--link-color);
       }
       > a.actived {
         --svg-icon-color: var(--svg-icon-color-actived);

@@ -16,6 +16,7 @@ const Wrapper = styled.div`
   > a {
     color: whitesmoke;
     text-decoration: none;
+    outline-offset: 3px;
 
     display: inline-flex;
     align-items: center;
@@ -27,6 +28,11 @@ const Wrapper = styled.div`
       color: white;
       text-decoration: underline;
       --svg-icon-color: white;
+    }
+    &:focus-visible {
+      outline-width: 2px;
+      outline-style: solid;
+      outline-color: var(--link-color);
     }
   }
 

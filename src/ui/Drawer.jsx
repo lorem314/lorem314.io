@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import styled from "styled-components"
 
-const HorizontalDrawer = ({
+const Drawer = ({
   isOpen = false,
   position = "left",
   width = "320",
@@ -18,7 +18,7 @@ const HorizontalDrawer = ({
   )
 }
 
-export default HorizontalDrawer
+export default Drawer
 
 const PortalWrapper = styled.div`
   position: absolute;

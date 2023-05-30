@@ -2,7 +2,9 @@ const cssPropMapper = {
   color: "color",
   bg: "background-color",
   bdc: "border-color",
+  olc: "outline-color",
   fill: "fill",
+  shadow: "box-shadow",
 }
 
 export const transition = (...props) => {

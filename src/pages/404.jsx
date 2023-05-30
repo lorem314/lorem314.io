@@ -1,10 +1,13 @@
 import React from "react"
 
+import Layout from "../layouts/Layout"
+import Page404 from "../components/Page404"
+
 const _404 = () => {
   return (
-    <div>
-      <h2>not found</h2>
-    </div>
+    <Layout>
+      <Page404 />
+    </Layout>
   )
 }
 

@@ -4,6 +4,7 @@ import styled from "styled-components"
 import Timer from "../ui/Timer"
 import useToggle from "../hooks/useToggle"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
+import { showNotification } from "../ui/NotificationList"
 
 const Wrapper = styled.div.attrs({
   className: "page-content",
@@ -11,7 +12,7 @@ const Wrapper = styled.div.attrs({
   max-width: 32rem;
   margin: 2rem auto;
   border: 1px solid transparent;
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 1.5rem 1rem;
 `
 
 const PageSetting = () => {
@@ -49,7 +50,7 @@ const PageSetting = () => {
         </select>{" "}
         篇文章链接
       </label>
-      <p>
+      {/* <p>
         还有
         <Timer
           duration={2000}
@@ -68,9 +69,26 @@ const PageSetting = () => {
         }}
       >
         {isTiming ? "暂停" : "开启"}
+      </button> */}
+      <br />
+      <br />
+      <button
+        onClick={() => {
+          const rdm = Math.floor(Math.random() * 10)
+          showNotification({
+            title: rdm,
+            body: lorem11.split(" ").slice(rdm).join(" "),
+            duration: 5000,
+          })
+        }}
+      >
+        显示通知
       </button>
     </Wrapper>
   )
 }
 
 export default PageSetting
+
+const lorem11 =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, facilis et!"

@@ -6,7 +6,7 @@ const Timer = ({
   end = 0,
   step = 1,
   isTiming = true,
-  onTimeup = () => {},
+  onTimesup = () => {},
   children = () => {},
 }) => {
   const [hasTimedup, setHasTimedup] = useState(false)
@@ -23,7 +23,7 @@ const Timer = ({
         setCount((c) => {
           if (c > 0) return c - step
           if (!hasTimedup) {
-            onTimeup()
+            onTimesup()
             setHasTimedup(true)
           }
           clearInterval(tid)
@@ -32,7 +32,7 @@ const Timer = ({
       }, delay)
     }
     return () => clearInterval(tid)
-  }, [delay, isTiming])
+  }, [delay, isTiming, hasTimedup, step, onTimesup])
 
   return children(count)
 }
