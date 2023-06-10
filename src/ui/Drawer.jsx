@@ -42,7 +42,6 @@ const PortalWrapper = styled.div`
 `
 
 const Portal = ({ position, onClose, width, children }) => {
-  const refPortal = useRef(null)
   const [styles, setStyles] = useState({
     offsetX: calcOffsetX(position),
     opacity: 0,

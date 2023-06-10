@@ -3,24 +3,39 @@ import { transition } from "../utils/css"
 
 const styled = { createGlobalStyle }
 
+/*
+{
+  "responsive-preview": {
+    "Mobile": [320,675],
+    "Tablet": [1024,765],
+    "Desktop": [1400,800],
+    "Desktop  HD": [1920,1080]
+  }
+}
+*/
+
 export const breakPoint = {
   mobile: 480,
   tablet: 768,
   laptop: 1024,
-  desktop: 1200,
+  desktop: 1366,
 }
 
 export const bpHideSearchModalButtonLabel = breakPoint.tablet
 export const bpHideSocialLinksText = breakPoint.laptop
+
+export const bpCollapseRightDrawer = breakPoint.laptop
 export const bpCollapseLeftDrawer = breakPoint.desktop
 
 export const leftDrawerWidth = 320
 
 const GlobalStyle = styled.createGlobalStyle`
   :root {
-    --theme-transition-props: 0.25s ease-in-out;
+    --theme-transition-props: 150ms ease-in-out;
 
     --svg-icon-size: 16px;
+
+    --header-height: 50px;
 
     /* --ui-[element name]-[property name]-[] */
     --ui-button-outline-width-focus-visible: 2px;
@@ -129,6 +144,10 @@ const GlobalStyle = styled.createGlobalStyle`
       --page-strong-text-color: rgba(255, 255, 255, 0.87);
       --page-primary-text-color: rgba(255, 255, 255, 0.6);
       --page-secondary-text-color: rgba(255, 255, 255, 0.42);
+
+      img {
+        filter: brightness(87.5%);
+      }
     }
   }
 
@@ -143,8 +162,13 @@ const GlobalStyle = styled.createGlobalStyle`
     }
   }
 
+  img {
+    transition: filter var(--theme-transition-props);
+  }
+
   strong {
     color: var(--page-strong-text-color);
+    transition: color var(--theme-transition-props);
   }
 
   label {
@@ -232,6 +256,7 @@ const GlobalStyle = styled.createGlobalStyle`
     padding-bottom: 0.25em;
     border-bottom: 1px solid var(--ui-default-border-color);
     margin-bottom: 0.5em;
+    /* font-size: 92.5%; */
     ${transition("bdc")}
   }
 
@@ -253,6 +278,12 @@ const GlobalStyle = styled.createGlobalStyle`
     margin: 0;
     border: none;
     padding: 0;
+  }
+
+  .flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `
 

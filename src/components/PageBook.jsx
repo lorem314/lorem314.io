@@ -1,19 +1,22 @@
 import React from "react"
 import styled from "styled-components"
 
+import BookCoverList from "./book/BookCoverList"
+
 const Wrapper = styled.div.attrs({
   className: "page-content",
 })`
-  max-width: 32rem;
+  max-width: 36rem;
   margin: 2rem auto;
   border: 1px solid transparent;
-  padding: 0 1.5rem 1rem;
+  padding: 10px 1rem 1rem;
 `
 
-const PageBook = () => {
+const PageBook = ({ allBookCover }) => {
   return (
     <Wrapper>
-      <h2>PageBook</h2>
+      <div className="page-label">书籍({allBookCover.length})</div>
+      <BookCoverList bookCovers={allBookCover} />
     </Wrapper>
   )
 }

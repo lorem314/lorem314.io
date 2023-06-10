@@ -140,8 +140,20 @@ const NotificationItem = ({ notification }) => {
   useEffect(() => setOffsetX(0), [])
 
   const onTimesup = () => {
-    setOffsetX(100)
-    setTimeout(() => manager.remove(notification.id), 500)
+    Promise.resolve()
+      .then(() => {
+        return new Promise((resolve) => {
+          setOffsetX(100)
+          setTimeout(() => {
+            resolve()
+          }, 500)
+        })
+      })
+      .then(() => {
+        manager.remove(notification.id)
+      })
+    // setOffsetX(100)
+    // setTimeout(() => manager.remove(notification.id), 500)
   }
 
   return (

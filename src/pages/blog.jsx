@@ -1,6 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
-// import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet"
 
 import Layout from "../layouts/Layout"
 import PageBlog from "../components/PageBlog"
@@ -10,7 +10,7 @@ const Blog = ({ data }) => {
 
   return (
     <Layout hasRightDrawer={true}>
-      {/* <Helmet title="博客 | Lorem314's Blog" /> */}
+      <Helmet title="博客 | Lorem314's Blog" />
       <PageBlog allBlogPost={allBlogPost} />
     </Layout>
   )

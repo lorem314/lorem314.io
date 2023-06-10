@@ -14,6 +14,17 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },
+  "imports": {
+    "#root/*": {
+      "default": "./*"
+    },
+    "#src/*": {
+      "default": "./src/*"
+    },
+    "#tools/*": {
+      "default": "./src/components/tools/*"
+    }
+  },
   "dependencies": {
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",

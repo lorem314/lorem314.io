@@ -16,7 +16,6 @@ const Wrapper = styled.div`
   > a {
     color: whitesmoke;
     text-decoration: none;
-    outline-offset: 3px;
 
     display: inline-flex;
     align-items: center;

@@ -12,7 +12,7 @@ const Wrapper = styled.div.attrs({
   max-width: 32rem;
   margin: 2rem auto;
   border: 1px solid transparent;
-  padding: 0 1.5rem 1rem;
+  padding: 10px 1.5rem 1rem;
 `
 
 const PageSetting = () => {
@@ -22,7 +22,7 @@ const PageSetting = () => {
   const [isTiming, toggleTiming] = useToggle(true)
   return (
     <Wrapper>
-      <h2>设置</h2>
+      <div className="page-label">设置</div>
       <label htmlFor="is-always-collapse-left-drawer">
         <input
           type="checkbox"

@@ -1,0 +1,233 @@
+/*
+ * gatsby prismjs
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #e4f8ff;
+  font-family: "FiraCode Regular";
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+pre::-webkit-scrollbar-track {
+  background-color: white !important;
+  /* background-color: #6272a4; */
+  border-radius: 0px;
+}
+pre::-webkit-scrollbar-thumb {
+  background-color: red !important;
+  /* background-color: #bd93f9; */
+  border-radius: 0px;
+}
+
+/* selection bg */
+pre[class*="language-"]::-moz-selection,
+pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection,
+code[class*="language-"] ::-moz-selection {
+  background: #073642;
+}
+
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection,
+code[class*="language-"]::selection,
+code[class*="language-"] ::selection {
+  background: #073642;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background-color: #131212;
+}
+:not(pre) > code[class*="language-"] {
+  padding: 0 0.25em;
+  margin: 0 0.2em;
+  font-size: 92.5%;
+  border-radius: 0.25em;
+  font-family: "FiraCode Regular";
+  color: #bd4147;
+  background-color: var(--gatsby-inline-code-bg);
+  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
+}
+
+/*
+ * code text color
+ */
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #95c085;
+}
+.token.punctuation {
+  color: #e4f8ff;
+  color: rgb(255, 216, 16);
+}
+.token.namespace {
+  opacity: 0.7;
+}
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #b5cea8;
+}
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.url,
+.token.inserted {
+  color: #ce9178;
+}
+.token.entity {
+  color: #a89984;
+  background: #131212;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #358cd6;
+}
+.token.function,
+.token.class-name {
+  color: #dcdcaa;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #d16969;
+}
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+.token.entity {
+  cursor: help;
+}
+
+/*
+ * prism js highlight
+ */
+
+.gatsby-highlight-code-line {
+  background-color: #022a4b;
+  display: block;
+  margin-right: -1em;
+  margin-left: -1em;
+  padding-right: 1em;
+  padding-left: 0.75em;
+  border-left: 0.25em solid #ffa7c4;
+}
+
+/*
+ * prism js highlight
+ */
+
+.gatsby-highlight-code-line {
+  background-color: #022a4b;
+  display: block;
+  margin-right: -1em;
+  margin-left: -1em;
+  padding-right: 1em;
+  padding-left: 0.75em;
+  border-left: 0.25em solid #ffa7c4;
+}
+
+/**
+ * Add back the container background-color, border-radius, padding, margin
+ * and overflow that we removed from <pre>.
+ */
+.gatsby-highlight {
+  background-color: #011627;
+  border-radius: 0.3em;
+  padding: 1em;
+  overflow: auto;
+
+  /* border-bottom-left-radius: 0.3em; */
+  /* border-bottom-right-radius: 0.3em; */
+  /* margin: 0.5em 0; */
+  /* margin-bottom: 1.75rem; */
+  /* max-width: 52rem; */
+}
+
+/**
+ * Remove the default PrismJS theme background-color, border-radius, margin,
+ * padding and overflow.
+ * 1. Make the element just wide enough to fit its content.
+ * 2. Always fill the visible space in .gatsby-highlight.
+ * 3. Adjust the position of the line numbers
+ */
+.gatsby-highlight pre[class*="language-"] {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  overflow: initial;
+  float: left;
+  min-width: 100%;
+}
+
+/**
+ * If you already use line highlighting
+ * Adjust the position of the line numbers
+ */
+.gatsby-highlight pre[class*="language-"].line-numbers {
+  padding-left: 2.8em;
+}
+
+/* custom code title */
+.custom-code-title {
+  margin-top: 1rem;
+  padding: 0.5em 1em;
+  font-family: "FiraCode Regular", "Courier New", Courier, monospace;
+  color: whitesmoke;
+  background-color: black;
+  z-index: 0;
+  overflow-x: auto;
+  /* word-break: keep-all; */
+  /* white-space: normal; */
+
+  border-top-left-radius: 0.3em;
+  border-top-right-radius: 0.3em;
+}
+
+div.custom-code-title + div.gatsby-highlight {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.gatsby-highlight + .gatsby-highlight {
+  margin-top: 1rem;
+}

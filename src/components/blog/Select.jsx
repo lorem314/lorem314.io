@@ -2,9 +2,12 @@ import React, { useCallback, useEffect, useId, useRef, useState } from "react"
 import styled from "styled-components"
 
 import Label from "../../ui/Label"
+import Modal from "../../ui/Modal"
+import HowToUseSelect from "./HowToUseSelect"
 
 import CloseIcon from "../../svg/CloseIcon"
 import DropdownMenuIcon from "../../svg/DropdownMenuIcon"
+import InfoIcon from "../../svg/InfoIcon"
 
 import useDebounce from "../../hooks/useDebounce"
 import { transition, clsx } from "../../utils/css"
@@ -294,8 +297,14 @@ const Select = ({
 
   return (
     <Wrapper isOpen={isOpen} hasSelectedTag={selectedTags.length !== 0}>
-      <Label htmlFor={id} className="page-label">
-        标签({options.length})
+      <Label htmlFor={id} className="page-label flex">
+        <span>标签({options.length})</span>
+        <Modal>
+          <button className="goast">
+            <InfoIcon />
+          </button>
+          <HowToUseSelect />
+        </Modal>
       </Label>
 
       <div className="selected-tags-input-group">

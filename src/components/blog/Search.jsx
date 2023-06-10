@@ -1,6 +1,10 @@
 import React, { useId } from "react"
 import styled from "styled-components"
 
+import Modal from "../../ui/Modal"
+import HowToUseSearch from "./HowToUseSearch"
+import InfoIcon from "../../svg/InfoIcon"
+
 const Wrapper = styled.div.attrs({
   className: "search-input",
 })`
@@ -17,8 +21,14 @@ const Search = ({ value = "", onChange = () => {} }) => {
 
   return (
     <Wrapper>
-      <label className="page-label" htmlFor={id}>
-        搜索
+      <label className="page-label flex" htmlFor={id}>
+        <span>搜索</span>
+        <Modal>
+          <button className="goast" title="如何使用">
+            <InfoIcon />
+          </button>
+          <HowToUseSearch />
+        </Modal>
       </label>
       <input
         className="search-input"

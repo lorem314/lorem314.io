@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react"
+import React from "react"
 import { Link } from "gatsby"
 import styled from "styled-components"
 
 import Logo from "./Logo"
+import LatestArticles from "../components/index/LatestArticles"
 
 import CloseIcon from "../svg/CloseIcon"
 import CodeIcon from "../svg/CodeIcon"
@@ -106,7 +107,7 @@ const Wrapper = styled.div`
   }
 `
 
-const LeftSidebar = ({ isInDrawer, onCloseDrawer }) => {
+const LeftSidebar = ({ isInDrawer, onCloseDrawer, latestArticles }) => {
   return (
     <Wrapper isInDrawer={isInDrawer}>
       {isInDrawer && (
@@ -135,30 +136,7 @@ const LeftSidebar = ({ isInDrawer, onCloseDrawer }) => {
         </nav>
 
         <section>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
-          <h1>recent</h1>
+          <LatestArticles latestArticles={latestArticles} />
         </section>
       </div>
       {/* <footer className="sidebar-footer">

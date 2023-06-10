@@ -4,11 +4,15 @@ import styled from "styled-components"
 import Search from "./blog/Search"
 import Select from "./blog/Select"
 import PostList from "./blog/PostList"
-
+import ButtonedTags from "./blog/ButtonedTags"
+import MediaQuery from "../ui/MediaQuery"
+import UncontrolleredDrawer from "../ui/UncontrolleredDrawer"
+import Pagination from "./blog/Pagination"
+import FixedButton from "../styled/FixedButton"
+import TagIcon from "../svg/TagIcon"
 import useDebounce from "../hooks/useDebounce"
-
 import { collectTags } from "../utils/formatter"
-import { breakPoint } from "../styled/GlobalStyle"
+import { breakPoint, bpCollapseRightDrawer } from "../styled/GlobalStyle"
 
 const Wrapper = styled.div.attrs({
   className: "",
@@ -20,7 +24,7 @@ const Wrapper = styled.div.attrs({
 
   display: grid;
   gap: 10px;
-  grid-template-columns: 5fr 3fr;
+  grid-template-columns: 5fr minmax(320px, 3fr);
 
   > .form-container {
     grid-column-start: 1;
@@ -37,6 +41,12 @@ const Wrapper = styled.div.attrs({
   > .page-content {
     padding: 10px;
   }
+  @media screen and (max-width: 768px) {
+    > .posts-container {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+  }
 
   @media screen and (max-width: ${breakPoint.tablet}px) {
     > .form-container {
@@ -50,9 +60,11 @@ const PageBlog = ({ allBlogPost = [] }) => {
   const [posts, setPosts] = useState(allBlogPost)
   const [selectedTags, setSelectedTags] = useState([])
   const [isOrLogic, setIsOrLogic] = useState(true)
+  // tags = [{ name, count }, { name, count }, ...]
   const tags = useMemo(() => collectTags(allBlogPost), [allBlogPost])
   const [searchTerm, setSearchTerm] = useState("")
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const perPage = 5
   const [currentPage, setCurrentPage] = useState(1)
 
   const handleChangeSearchTerm = useCallback(
@@ -82,8 +94,15 @@ const PageBlog = ({ allBlogPost = [] }) => {
     setIsOrLogic((_) => !_)
   }, [])
 
+  const handleClickPage = useCallback(
+    (pageNum) => () => {
+      setCurrentPage(pageNum)
+    },
+    []
+  )
+
   useEffect(() => {
-    // setCurrentPage(() => 1)
+    setCurrentPage(1)
     setPosts(
       allBlogPost
         .filter((post) => {
@@ -105,7 +124,10 @@ const PageBlog = ({ allBlogPost = [] }) => {
     )
   }, [allBlogPost, debouncedSearchTerm, selectedTags, isOrLogic])
 
-  console.log("posts :", posts)
+  const startIndex = (currentPage - 1) * perPage
+  const endIndex = currentPage * perPage
+  const slicedPosts = posts.slice(startIndex, endIndex)
+
   return (
     <Wrapper>
       <div className="form-container page-content">
@@ -121,13 +143,49 @@ const PageBlog = ({ allBlogPost = [] }) => {
       </div>
 
       <div className="posts-container page-content">
-        <div className="page-label">博客</div>
-        <PostList posts={posts} />
+        <div className="page-label flex">
+          <span>
+            博客([{startIndex + 1}-
+            {endIndex > allBlogPost.length ? allBlogPost.length : endIndex}
+            ]/{allBlogPost.length})
+          </span>
+          <label htmlFor="per-page" style={{ fontWeight: "normal" }}>
+            每页显示
+            <select id="per-page">
+              <option value="5">5</option>
+              <option value="10">10</option>
+            </select>
+            篇文章
+          </label>
+        </div>
+        <PostList posts={slicedPosts} />
+        <Pagination
+          length={Math.ceil(posts.length / perPage)}
+          currentPage={currentPage}
+          onClickPage={handleClickPage}
+        />
       </div>
 
-      <div className="tags-container page-content">
-        <div className="page-label">所有标签</div>
-      </div>
+      <MediaQuery query={`(max-width: 768px)`}>
+        <UncontrolleredDrawer position="right" width="320" title="所有标签">
+          <FixedButton position="right">
+            <TagIcon />
+          </FixedButton>
+          <ButtonedTags
+            tags={tags}
+            selectedTags={selectedTags}
+            handleSelectTag={handleSelectTag}
+          />
+        </UncontrolleredDrawer>
+        <div className="tags-container page-content">
+          <div className="page-label">所有标签</div>
+          <ButtonedTags
+            tags={tags}
+            selectedTags={selectedTags}
+            handleSelectTag={handleSelectTag}
+          />
+        </div>
+      </MediaQuery>
     </Wrapper>
   )
 }

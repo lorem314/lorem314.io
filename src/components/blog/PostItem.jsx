@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import styled from "styled-components"
 
 import Tags from "../../ui/Tags"
+import { formateDate } from "../../utils/formatter"
 import { transition } from "../../utils/css"
 
 const Wrapper = styled.li.attrs({
@@ -22,13 +23,15 @@ const Wrapper = styled.li.attrs({
 `
 
 const PostItem = ({ post }) => {
+  const { title, tags, createdAt } = post.frontmatter
+  console.log("createAt", createdAt)
   return (
     <Wrapper>
       <h3 className="post-title">
-        <Link to={post.fields.slug}>{post.frontmatter.title}</Link>
+        <Link to={post.fields.slug}>{title}</Link>
       </h3>
-      <Tags tags={post.frontmatter.tags} />
-      <p className="created-at">发布于 99 天前</p>
+      <Tags tags={tags} />
+      <p className="created-at">{formateDate(createdAt)}</p>
     </Wrapper>
   )
 }

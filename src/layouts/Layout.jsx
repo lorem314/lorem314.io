@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import styled from "styled-components"
 
 import Header from "./Header"
 import Footer from "./Footer"
 import LeftSidebar from "./LeftSidebar"
 import Drawer from "../ui/Drawer"
-
 import GlobalStyle, {
   bpCollapseLeftDrawer,
   leftDrawerWidth,
 } from "../styled/GlobalStyle"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
 import { transition } from "../utils/css"
+import "../css/typography.css"
 
 const Wrapper = styled.div`
   > main {
@@ -37,6 +37,11 @@ const Wrapper = styled.div`
       color: var(--content-normal-text-color);
       background-color: var(--page-bg);
       ${transition("color", "bg")}
+    }
+    > .main-content:fullscreen {
+      > * {
+        max-width: 100%;
+      }
     }
   }
 `
@@ -77,8 +82,11 @@ const Layout = ({ children, hasRightDrawer = false }) => {
     }
   }, [isAlwaysCollapseLeftDrawer])
 
-  const handleOpenLeftDrawer = () => setIsLeftDrawerOpen(true)
-  const handleCloseLeftDrawer = () => setIsLeftDrawerOpen(false)
+  const handleOpenLeftDrawer = useCallback(() => setIsLeftDrawerOpen(true), [])
+  const handleCloseLeftDrawer = useCallback(
+    () => setIsLeftDrawerOpen(false),
+    []
+  )
 
   return (
     <>
@@ -109,15 +117,10 @@ const Layout = ({ children, hasRightDrawer = false }) => {
         )}
 
         <main>
-          <div className="main-content">
+          <div id="main-content" className="main-content">
             {children}
             <Footer />
           </div>
-          {/* <div>isCollapseLeftDrawer - {isCollapseLeftDrawer.toString()}</div>
-          <div>isLeftDrawerOpen - {isLeftDrawerOpen.toString()}</div>
-          <div>
-            isAlwaysCollapseLeftDrawer - {isAlwaysCollapseLeftDrawer.toString()}
-          </div> */}
         </main>
 
         {/*  */}

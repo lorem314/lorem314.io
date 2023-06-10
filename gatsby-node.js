@@ -11,11 +11,11 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const splitedSlug = slug.split("/")
     console.log("[>>] splitted slug :", splitedSlug)
 
-    if (splitedSlug.length === 4 && splitedSlug.includes("blogs")) {
+    if (splitedSlug.length === 4 && splitedSlug.includes("blog")) {
       createNodeField({ node, name: "type", value: "TYPE_BLOG_POST" })
-    } else if (splitedSlug.length === 4 && splitedSlug.includes("books")) {
+    } else if (splitedSlug.length === 4 && splitedSlug.includes("book")) {
       createNodeField({ node, name: "type", value: "TYPE_BOOK_COVER" })
-    } else if (splitedSlug.length === 5 && splitedSlug.includes("books")) {
+    } else if (splitedSlug.length === 5 && splitedSlug.includes("book")) {
       createNodeField({ node, name: "type", value: "TYPE_BOOK_CHAPTER" })
     } else {
       // createNodeField({ node, name: "type", value: "NaT" })

@@ -27,4 +27,10 @@ const times = {
   "[] 个月前": 1000 * 60 * 60 * 24 * 7 * 4,
 }
 
-export const formateDate = (date) => {}
+export const formateDate = (date) => {
+  const d = new Date(date)
+  const yy = d.getFullYear()
+  const mm = d.getMonth() + 1
+  const dd = d.getDate()
+  return `${yy} 年 ${mm} 月 ${dd} 日`
+}

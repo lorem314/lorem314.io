@@ -4,10 +4,13 @@ import styled from "styled-components"
 import Logo from "./Logo"
 import SocialLinks from "./SocialLinks"
 import Theme from "./Theme"
+import Modal from "../ui/Modal"
 import SearchModalButton from "./SearchModalButton"
+import SearchModal from "./SearchModal"
 import MenuIcon from "../svg/MenuIcon"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
 import { transition } from "../utils/css"
+import { bpCollapseRightDrawer } from "../styled/GlobalStyle"
 
 const Wrapper = styled.header`
   height: 50px;
@@ -19,7 +22,7 @@ const Wrapper = styled.header`
   align-items: center;
   gap: 10px;
 
-  @media screen and (max-width: 1080px) {
+  @media screen and (max-width: ${bpCollapseRightDrawer}px) {
     padding-right: ${({ hasRightDrawer }) => (hasRightDrawer ? 50 : 10)}px;
   }
 
@@ -79,10 +82,13 @@ const Header = ({
 
       <div>
         <Logo />
-        <SearchModalButton />
+        <Modal>
+          <SearchModalButton />
+          <SearchModal />
+        </Modal>
       </div>
 
-      <div>
+      <div style={{}}>
         <SocialLinks />
         <Theme />
       </div>
@@ -90,4 +96,4 @@ const Header = ({
   )
 }
 
-export default Header
+export default React.memo(Header)

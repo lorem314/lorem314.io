@@ -10,7 +10,7 @@ const Wrapper = styled.button`
   border: none;
   padding: 0.25em 0.75em;
   border-radius: 1em;
-  background-color: whitesmoke;
+  background-color: #f5f5f5;
   max-width: 32rem;
 
   flex: 1 0 auto;
@@ -18,12 +18,15 @@ const Wrapper = styled.button`
   align-items: center;
 
   &:hover {
-    background-color: white;
+    background-color: #eee;
   }
   &:focus-visible {
     outline-width: 2px;
     outline-style: solid;
     outline-color: var(--link-color);
+  }
+  &:active {
+    background-color: #e8e8e8;
   }
 
   .btn-label {
@@ -44,20 +47,21 @@ const Wrapper = styled.button`
     padding: 4px;
     border-radius: 25%;
     --svg-icon-size: 24px;
-    --svg-icon-color: white;
+    --svg-icon-color: whitesmoke;
     background-color: rgba(0, 0, 0, 0.25);
     > .btn-label {
       display: none;
     }
     :hover {
-      background-color: transparent;
+      --svg-icon-color: white;
+      background-color: rgba(0, 0, 0, 0.25);
     }
   }
 `
 
-const SearchModalButton = () => {
+const SearchModalButton = (props) => {
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <MagnifyingGlass />
       <div className="btn-label">
         <span className="btn-text">搜索</span>
