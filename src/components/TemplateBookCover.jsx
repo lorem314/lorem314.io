@@ -33,7 +33,6 @@ const Wrapper = styled.div`
 const TemplateBookCover = ({ bookCover, bookChapters }) => {
   const coverImage = getImage(bookCover.frontmatter.cover)
 
-  console.log("bookChapters ", bookChapters)
   return (
     <Wrapper>
       <div className="page-content">

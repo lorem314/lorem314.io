@@ -18,8 +18,6 @@ const PrevNext = ({ bookChapters = [], chapterNo }) => {
       parseInt(chapter.frontmatter.chapterNo) === parseInt(chapterNo) + 1
   )
 
-  console.log("prevChapter", prevChapter)
-  console.log("nextChapter", nextChapter)
   return (
     <Wrapper>
       <div>

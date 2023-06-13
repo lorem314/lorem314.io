@@ -15,8 +15,9 @@ const StyledEn = styled.span``
 export const En = (props) => <StyledEn {...props}>{props.children}</StyledEn>
 
 const StyledStrong = styled.strong`
+  padding: 0 0.125em;
   color: var(--page-strong-text-color);
-  transition: color 250ms ease-in-out;
+  transition: color var(--theme-transition-props);
 `
 export const Strong = (props) => (
   <StyledStrong {...props}>{props.children}</StyledStrong>

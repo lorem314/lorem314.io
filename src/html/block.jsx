@@ -7,8 +7,8 @@ import styled from "styled-components"
 const StyledP = styled.p`
   margin: 1rem 0;
   line-height: 1.5;
-  letter-spacing: 0.25px;
-  font-size: 1.125rem;
+  /* letter-spacing: 0.25px; */
+  /* font-size: 1.125rem; */
 `
 export const P = (props) => <StyledP {...props}>{props.children}</StyledP>
 
@@ -45,7 +45,22 @@ export const Blockquote = (props) => (
  */
 export const Ul = styled.ul`
   list-style-type: ${(props) => (props.typeless ? "none" : "initial")};
-  padding-left: ${(props) => (props.typeless ? "0.5rem" : "1.5rem")};
+  padding-left: ${(props) => (props.typeless ? "0.5rem" : "2rem")};
+  > li {
+    font-family: "FiraCode Regular";
+  }
+  > p {
+    margin: 0.25rem 0 0.5rem;
+    padding-left: 1.5rem;
+  }
+`
+
+/**
+ * element: ol
+ */
+export const Ol = styled.ol`
+  list-style-type: ${(props) => (props.typeless ? "none" : "decimal")};
+  padding-left: ${(props) => (props.typeless ? "0.5rem" : "2rem")};
   > li {
     font-family: "FiraCode Regular";
   }

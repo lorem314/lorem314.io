@@ -13,6 +13,7 @@ import TagIcon from "../svg/TagIcon"
 import useDebounce from "../hooks/useDebounce"
 import { collectTags } from "../utils/formatter"
 import { breakPoint, bpCollapseRightDrawer } from "../styled/GlobalStyle"
+import { useGlobalConfig } from "../contexts/GlobalConfigContext"
 
 const Wrapper = styled.div.attrs({
   className: "",
@@ -41,7 +42,7 @@ const Wrapper = styled.div.attrs({
   > .page-content {
     padding: 10px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: ${bpCollapseRightDrawer}px) {
     > .posts-container {
       grid-column-start: 1;
       grid-column-end: 3;
@@ -64,7 +65,9 @@ const PageBlog = ({ allBlogPost = [] }) => {
   const tags = useMemo(() => collectTags(allBlogPost), [allBlogPost])
   const [searchTerm, setSearchTerm] = useState("")
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
-  const perPage = 5
+
+  const { perPageOnBlogPage, changePerPageOnBlogPage } = useGlobalConfig()
+  const perPage = perPageOnBlogPage
   const [currentPage, setCurrentPage] = useState(1)
 
   const handleChangeSearchTerm = useCallback(
@@ -100,6 +103,11 @@ const PageBlog = ({ allBlogPost = [] }) => {
     },
     []
   )
+
+  const handleChangePerPage = (event) => {
+    const value = event.target.value
+    changePerPageOnBlogPage(parseInt(value))
+  }
 
   useEffect(() => {
     setCurrentPage(1)
@@ -144,14 +152,18 @@ const PageBlog = ({ allBlogPost = [] }) => {
 
       <div className="posts-container page-content">
         <div className="page-label flex">
-          <span>
+          <span style={{ fontFamily: "FiraCode Regular" }}>
             博客([{startIndex + 1}-
-            {endIndex > allBlogPost.length ? allBlogPost.length : endIndex}
-            ]/{allBlogPost.length})
+            {endIndex > posts.length ? posts.length : endIndex}]/
+            {posts.length}/{allBlogPost.length})
           </span>
           <label htmlFor="per-page" style={{ fontWeight: "normal" }}>
             每页显示
-            <select id="per-page">
+            <select
+              id="per-page"
+              defaultValue={`${perPage}`}
+              onChange={handleChangePerPage}
+            >
               <option value="5">5</option>
               <option value="10">10</option>
             </select>
@@ -166,7 +178,7 @@ const PageBlog = ({ allBlogPost = [] }) => {
         />
       </div>
 
-      <MediaQuery query={`(max-width: 768px)`}>
+      <MediaQuery query={`(max-width: ${bpCollapseRightDrawer}px)`}>
         <UncontrolleredDrawer position="right" width="320" title="所有标签">
           <FixedButton position="right">
             <TagIcon />

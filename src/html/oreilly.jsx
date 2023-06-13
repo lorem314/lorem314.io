@@ -46,12 +46,14 @@ export const GreenSquirrel = ({ children }) => {
 }
 
 const BorderBlockWrapper = styled.section`
+  margin: 1rem 0;
   border: 1px solid lightgrey;
   padding: 1rem;
   .title {
     text-align: center;
     margin: 0;
     font-size: 1.125rem;
+    font-weight: bolder;
   }
 `
 export const BorderBlock = ({ children }) => {

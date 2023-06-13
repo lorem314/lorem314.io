@@ -5,6 +5,7 @@ import Timer from "../ui/Timer"
 import useToggle from "../hooks/useToggle"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
 import { showNotification } from "../ui/NotificationList"
+import { ThemeToggler } from "gatsby-plugin-dark-mode"
 
 const Wrapper = styled.div.attrs({
   className: "page-content",
@@ -16,10 +17,15 @@ const Wrapper = styled.div.attrs({
 `
 
 const PageSetting = () => {
-  const { toggleIsAlwaysCollapseLeftDrawer, isAlwaysCollapseLeftDrawer } =
-    useGlobalConfig()
+  const {
+    toggleIsAlwaysCollapseLeftDrawer,
+    isAlwaysCollapseLeftDrawer,
+    perPageOnBlogPage,
+    changePerPageOnBlogPage,
+    prefersColorScheme,
+    changePrefersColorScheme,
+  } = useGlobalConfig()
 
-  const [isTiming, toggleTiming] = useToggle(true)
   return (
     <Wrapper>
       <div className="page-label">设置</div>
@@ -34,47 +40,28 @@ const PageSetting = () => {
       </label>
       <br />
       <br />
-      <label htmlFor="">
+      <label htmlFor="per-page">
         博客页面每页显示{" "}
         <select
-          name=""
-          id=""
+          id="per-page"
+          defaultValue={`${perPageOnBlogPage}`}
           onChange={(event) => {
-            console.log(event.target.value)
+            changePerPageOnBlogPage(event.target.value)
           }}
         >
-          <option value="3">3</option>
           <option value="5">5</option>
           <option value="10">10</option>
-          <option value="20">20</option>
         </select>{" "}
         篇文章链接
       </label>
-      {/* <p>
-        还有
-        <Timer
-          duration={2000}
-          isTiming={isTiming}
-          onTimeup={() => {
-            console.log("time up")
-          }}
-        >
-          {(time) => time}
-        </Timer>
-        秒
-      </p>
-      <button
-        onClick={() => {
-          toggleTiming()
-        }}
-      >
-        {isTiming ? "暂停" : "开启"}
-      </button> */}
       <br />
       <br />
+
       <button
         onClick={() => {
           const rdm = Math.floor(Math.random() * 10)
+          const lorem11 =
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, facilis et!"
           showNotification({
             title: rdm,
             body: lorem11.split(" ").slice(rdm).join(" "),
@@ -89,6 +76,3 @@ const PageSetting = () => {
 }
 
 export default PageSetting
-
-const lorem11 =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint, facilis et!"

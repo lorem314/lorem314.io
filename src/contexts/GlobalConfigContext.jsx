@@ -19,6 +19,11 @@ export default function GlobalConfigProvider({ children }) {
     }
   )
 
+  const [perPageOnBlogPage, setPerPageOnBlogPage] = useLocalStorage(
+    "global-config_per-page-on-blog-page",
+    5
+  )
+
   useEffect(() => {
     const handlePrefersColorSchemeChange = (event) => {
       setPrefersColorScheme(event.matches ? "dark" : "light")
@@ -36,7 +41,7 @@ export default function GlobalConfigProvider({ children }) {
         handlePrefersColorSchemeChange
       )
     }
-  }, [])
+  }, [setPrefersColorScheme])
 
   const toggleIsAlwaysCollapseLeftDrawer = () => {
     setIsAlwaysCollapseLeftDrawer(
@@ -46,14 +51,35 @@ export default function GlobalConfigProvider({ children }) {
   const togglePrefersColorScheme = () => {
     setPrefersColorScheme((prevPrefersColorScheme) => !prevPrefersColorScheme)
   }
+  const changePrefersColorScheme = (colorSchema) => {
+    switch (colorSchema) {
+      case "light":
+        setPrefersColorScheme("light")
+        break
+      case "dark":
+        setPrefersColorScheme("dark")
+        break
+      default:
+        break
+    }
+  }
+
+  const changePerPageOnBlogPage = (number) => {
+    setPerPageOnBlogPage(number)
+  }
 
   return (
     <GlobalConfigContext.Provider
       value={{
         isAlwaysCollapseLeftDrawer,
         toggleIsAlwaysCollapseLeftDrawer,
+
         prefersColorScheme,
         togglePrefersColorScheme,
+        changePrefersColorScheme,
+
+        perPageOnBlogPage,
+        changePerPageOnBlogPage,
       }}
     >
       {children}

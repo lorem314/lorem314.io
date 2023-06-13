@@ -24,7 +24,7 @@ const Wrapper = styled.li.attrs({
 
 const PostItem = ({ post }) => {
   const { title, tags, createdAt } = post.frontmatter
-  console.log("createAt", createdAt)
+
   return (
     <Wrapper>
       <h3 className="post-title">

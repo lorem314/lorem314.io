@@ -10,6 +10,7 @@ const useLatestArticle = () => {
           limit: 4
         ) {
           nodes {
+            id
             frontmatter {
               title
               tags
@@ -27,6 +28,7 @@ const useLatestArticle = () => {
           limit: 4
         ) {
           nodes {
+            id
             frontmatter {
               title
               chapterNo

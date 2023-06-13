@@ -24,7 +24,7 @@ export const breakPoint = {
 export const bpHideSearchModalButtonLabel = breakPoint.tablet
 export const bpHideSocialLinksText = breakPoint.laptop
 
-export const bpCollapseRightDrawer = breakPoint.laptop
+export const bpCollapseRightDrawer = breakPoint.tablet
 export const bpCollapseLeftDrawer = breakPoint.desktop
 
 export const leftDrawerWidth = 320
@@ -96,6 +96,8 @@ const GlobalStyle = styled.createGlobalStyle`
       --page-strong-text-color: rgb(0, 0, 0);
       --page-primary-text-color: rgb(28, 27, 31);
       --page-secondary-text-color: rgb(108, 104, 119);
+
+      --gatsby-inline-code-bg: rgba(175, 184, 193, 0.2);
     }
     &.dark {
       color: white;
@@ -144,6 +146,8 @@ const GlobalStyle = styled.createGlobalStyle`
       --page-strong-text-color: rgba(255, 255, 255, 0.87);
       --page-primary-text-color: rgba(255, 255, 255, 0.6);
       --page-secondary-text-color: rgba(255, 255, 255, 0.42);
+
+      --gatsby-inline-code-bg: rgba(110, 118, 129, 0.4);
 
       img {
         filter: brightness(87.5%);
@@ -207,6 +211,11 @@ const GlobalStyle = styled.createGlobalStyle`
         outline: 1px solid var(--ui-input-text-border-color-focus);
       }
     }
+  }
+
+  select {
+    line-height: 1.2;
+    /* padding: 0.125rem; */
   }
 
   kbd {

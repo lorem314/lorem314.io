@@ -64,9 +64,9 @@ pre[class*="language-"] {
   background-color: #131212;
 }
 :not(pre) > code[class*="language-"] {
-  padding: 0 0.25em;
-  margin: 0 0.2em;
-  font-size: 92.5%;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 87.5%;
   border-radius: 0.25em;
   font-family: "FiraCode Regular";
   color: #bd4147;

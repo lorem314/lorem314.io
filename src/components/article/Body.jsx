@@ -4,8 +4,8 @@ import { MDXProvider } from "@mdx-js/react"
 import styled from "styled-components"
 
 import { H2, H3, H4, H5 } from "../../html/headings"
-import { P, Blockquote, Ul, Table } from "../../html/block"
-import { U } from "../../html/inline"
+import { P, Blockquote, Ul, Ol, Table } from "../../html/block"
+import { U, Strong } from "../../html/inline"
 
 import "prismjs/themes/prism-solarizedlight.css"
 import "../../css/custom-prismjs-theme.css"
@@ -27,9 +27,10 @@ const components = {
   p: (props) => <P {...props} />,
   blockquote: (props) => <Blockquote {...props} />,
   ul: (props) => <Ul {...props} />,
+  ol: (props) => <Ol {...props} />,
   u: (props) => <U {...props} />,
   table: (props) => <Table {...props} />,
-  // strong: (props) => <Strong {...props} />,
+  strong: (props) => <Strong {...props} />,
 }
 
 const Body = ({ body }) => {

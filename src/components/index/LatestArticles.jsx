@@ -25,7 +25,7 @@ const LatestArticles = () => {
       <div className="page-label">博客({blogPosts.length})</div>
       {blogPosts.map((post) => {
         return (
-          <article>
+          <article key={post.id}>
             <h4>
               <Link to={post.fields.slug}>{post.frontmatter.title}</Link>
             </h4>
@@ -37,7 +37,7 @@ const LatestArticles = () => {
       <div className="page-label">书籍({bookChapters.length})</div>
       {bookChapters.map((chapter) => {
         return (
-          <article>
+          <article key={chapter.id}>
             <h4>
               <Link to={chapter.fields.slug}>
                 第{chapter.frontmatter.chapterNo}章 {chapter.frontmatter.title}

@@ -94,7 +94,7 @@ const Wrapper = styled.div`
     > section {
       flex: 1 1 auto;
       margin: 10px 10px 0;
-      padding: 0 10px;
+      padding: 0 10px 10px;
       overflow: auto;
       box-shadow: 0 1px 4px 2px rgba(0, 0, 0, 0.1);
       background-color: var(--left-sidebar-section-bg);

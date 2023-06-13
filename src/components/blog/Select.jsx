@@ -192,10 +192,8 @@ const Select = ({
     const nodeTagInput = refTagInput.current
     const handleKeyDown = (event) => {
       if (event.target !== nodeTagInput) return
-      console.log("code :", event.code)
       switch (event.code) {
         case "Escape":
-          console.log("clear selected tags")
           clearSelectedTags()
           break
         case "Enter":
@@ -298,7 +296,9 @@ const Select = ({
   return (
     <Wrapper isOpen={isOpen} hasSelectedTag={selectedTags.length !== 0}>
       <Label htmlFor={id} className="page-label flex">
-        <span>标签({options.length})</span>
+        <span style={{ fontFamily: "FiraCode Regular" }}>
+          标签({options.length})
+        </span>
         <Modal>
           <button className="goast">
             <InfoIcon />

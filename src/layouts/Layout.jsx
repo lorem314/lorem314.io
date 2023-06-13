@@ -34,7 +34,7 @@ const Wrapper = styled.div`
       scroll-behavior: smooth;
       padding: 0 10px;
 
-      color: var(--content-normal-text-color);
+      color: var(--page-primary-text-color);
       background-color: var(--page-bg);
       ${transition("color", "bg")}
     }
