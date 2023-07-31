@@ -1,0 +1,91 @@
+---
+title: "博客指南"
+tags: ["开发", "博客"]
+createdAt: "2023-06-08"
+
+id: "a2b9a2719ae9049849b0245392963647"
+---
+
+该文章能教你如何更好地创建博客。
+
+## 创建博客
+
+在 `/published/blog/` 文件夹中创建文件夹，以博客标题命名，忽略不符合文件名的字符。
+
+### 头条
+
+以下是 `frontmatter` 中的属性
+
+#### 标题
+
+```
+title: "标题"
+```
+
+#### 标签
+
+```
+tags: ["标签-1","标签-2","标签-3"]
+```
+
+#### 创建日期
+
+```
+createdAt: "1990-01-01"
+```
+
+#### ID
+
+```
+id: "6w6w4f65sd41f35s4g"
+```
+
+使用以下代码创建
+
+```shell
+> node
+> require("crypto").randomBytes(8).toString("hex")
+```
+
+## 元素测试
+
+### 段落
+
+这是一个非常普通的段落。
+
+### 块引用
+
+> 也叫 callout，用于提供额外信息。
+
+### 代码块
+
+以下是一个代码块
+
+```js
+import { useState, useEffect } from "react"
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const tid = setTimeout(() => setDebouncedValue(value), delay)
+    return () => clearTimeout(tid)
+  }, [value, delay])
+
+  return debouncedValue
+}
+
+export default useDebounce
+```
+
+## 二级标题
+
+### 三级标题
+
+#### 四级标题
+
+##### 五级标题
+
+###### 六级标题
+
+####### 不存在的七级标题
