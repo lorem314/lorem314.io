@@ -18,7 +18,6 @@ const sharedStyles = css`
       width: 1.25em;
       height: 1.25em;
       transform: translateY(0.25rem);
-
       .icon {
         fill: var(--link-color);
       }
@@ -41,7 +40,12 @@ const StyledH1 = styled.h1`
   }
 `
 export const H1 = (props) => {
-  return <StyledH1 {...props}>{props.children}</StyledH1>
+  return (
+    <StyledH1 {...props}>
+      {/* <HeadingIcon level="1" /> */}
+      {props.children}
+    </StyledH1>
+  )
 }
 
 const StyledH2 = styled.h2`

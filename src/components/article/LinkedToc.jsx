@@ -1,11 +1,18 @@
-import React, { useRef, useState } from "react"
-import styled from "styled-components"
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+  createRef,
+} from "react"
+import styled, { css } from "styled-components"
 
 import useToggle from "../../hooks/useToggle"
 import ChevronIcon from "../../svg/ChevronIcon"
 import DoubleArrowIcon from "../../svg/DoubleArrowIcon"
 
 import Details from "../../html/Details"
+import { justStopPropagation } from "../../utils/event"
 
 const Wrapper = styled.aside.attrs({
   id: "linked-toc",
@@ -65,23 +72,69 @@ const Wrapper = styled.aside.attrs({
   }
 `
 
+const cssDetailsHeader = css`
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+
+  > .details-title {
+    flex-grow: 1;
+  }
+
+  > button {
+    opacity: 0;
+  }
+
+  &:hover {
+    > button {
+      opacity: 0.5;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* > button {
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+  } */
+`
+
+const DetailsHeaderInLinkedToc = styled.div`
+  ${cssDetailsHeader}
+`
+
 const LinkedToc = ({ tableOfContents }) => {
   const refDetails = useRef(null)
   const refItems = useRef(null)
 
+  const handleExpandAll = (event) => {
+    event?.stopPropagation()
+    refDetails.current?.expand()
+    refItems.current?.expandAll()
+  }
+  const handleCollapseAll = (event) => {
+    event?.stopPropagation()
+    refDetails.current?.collapse()
+    refItems.current?.collapseAll()
+  }
+
   return (
     <Wrapper>
-      <Details open>
-        <div style={{ flexGrow: "1", display: "flex", alignItems: "center" }}>
-          <strong style={{ flexGrow: "1" }}>目录</strong>
-          <button className="goast">
+      <Details open ref={refDetails}>
+        <DetailsHeaderInLinkedToc>
+          <strong className="details-title">目录</strong>
+          <button className="goast" onClick={handleCollapseAll}>
             <DoubleArrowIcon variant="up" />
           </button>
-          <button className="goast">
+          <button className="goast" onClick={handleExpandAll}>
             <DoubleArrowIcon variant="down" />
           </button>
-        </div>
-        <Items ref={ref} items={tableOfContents.items} />
+        </DetailsHeaderInLinkedToc>
+        <Items ref={refItems} items={tableOfContents.items} />
       </Details>
     </Wrapper>
   )
@@ -89,39 +142,94 @@ const LinkedToc = ({ tableOfContents }) => {
 
 export default React.memo(LinkedToc)
 
-const Items = ({ items = [], level = 0 }) => {
+const Items = forwardRef(({ items = [], level = 0 }, ref) => {
+  const refs = useRef(items.map(() => createRef()))
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        expandAll() {
+          refs.current.forEach((ref) => {
+            ref.current.expandAll()
+          })
+        },
+        collapseAll() {
+          refs.current.forEach((ref) => {
+            ref.current.collapseAll()
+          })
+        },
+      }
+    },
+    []
+  )
+
   return (
     <ul>
       {items.map((item, index) => {
         return (
           <li key={index}>
-            <Item item={item} level={level} />
+            <Item ref={refs.current[index]} item={item} level={level} />
           </li>
         )
       })}
     </ul>
   )
-}
+})
 
-const Item = ({ item, level = 0 }) => {
+const DetailsHeaderInList = styled.li`
+  ${cssDetailsHeader}
+`
+
+const Item = forwardRef(({ item, level = 0 }, ref) => {
+  const refDetails = useRef(null)
+  const refItems = useRef(null)
+
+  const handleExpandAll = (event) => {
+    event?.stopPropagation()
+    refDetails.current?.expand()
+    refItems.current?.expandAll()
+  }
+  const handleCollapseAll = (event) => {
+    event?.stopPropagation()
+    refDetails.current?.collapse()
+    refItems.current?.collapseAll()
+  }
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        collapseAll() {
+          handleCollapseAll()
+        },
+        expandAll() {
+          handleExpandAll()
+        },
+      }
+    },
+    []
+  )
+
   if (!item.items) {
     return <a href="">{item.title}</a>
   } else {
     return (
-      <Details open>
-        <li style={{ flexGrow: "1", display: "flex", alignItems: "center" }}>
-          <div style={{ flexGrow: "1" }}>
-            <a href="">{item.title}</a>
+      <Details open ref={refDetails}>
+        <DetailsHeaderInList>
+          <div className="details-title">
+            <a href="/" onClick={justStopPropagation}>
+              {item.title}
+            </a>
           </div>
-          <button className="goast">
+          <button className="goast" onClick={handleCollapseAll}>
             <DoubleArrowIcon variant="up" />
           </button>
-          <button className="goast">
+          <button className="goast" onClick={handleExpandAll}>
             <DoubleArrowIcon variant="down" />
           </button>
-        </li>
-        <Items items={item.items} level={level + 1} />
+        </DetailsHeaderInList>
+        <Items ref={refItems} items={item.items} level={level + 1} />
       </Details>
     )
   }
-}
+})

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { forwardRef, useImperativeHandle, useState } from "react"
 import styled from "styled-components"
 
 import useToggle from "../hooks/useToggle"
@@ -6,15 +6,20 @@ import ChevronIcon from "../svg/ChevronIcon"
 
 const DetailsWrapper = styled.details`
   > summary {
-    /* background-color: rgba(0, 0, 0, 0.25); */
-
     display: flex;
     align-items: center;
     gap: 0.25em;
 
-    /* padding: 0.125rem; */
     cursor: pointer;
     list-style: none;
+
+    > .details-toggler {
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
 
     &::marker,
     &::-webkit-details-marker {
@@ -23,17 +28,44 @@ const DetailsWrapper = styled.details`
   }
 `
 
-const Details = ({ open, children }) => {
-  const [isOpen, toggleIsOpen] = useToggle(open)
+const Details = forwardRef(({ open, children }, ref) => {
+  const [isOpen, setIsOpen] = useState(open)
+
+  const handleExpand = (event) => {
+    event?.preventDefault()
+    setIsOpen(true)
+  }
+  const handleCollapse = (event) => {
+    event?.preventDefault()
+    setIsOpen(false)
+  }
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        expand() {
+          handleExpand()
+        },
+        collapse() {
+          handleCollapse()
+        },
+      }
+    },
+    []
+  )
+
   return (
     <DetailsWrapper open={isOpen}>
-      <summary onClick={toggleIsOpen}>
-        <ChevronIcon variant={isOpen ? "down" : "right"} />
+      <summary onClick={isOpen ? handleCollapse : handleExpand}>
+        <button className="details-toggler goast">
+          <ChevronIcon variant={isOpen ? "down" : "right"} />
+        </button>
         {children[0]}
       </summary>
       {children[1]}
     </DetailsWrapper>
   )
-}
+})
 
 export default Details

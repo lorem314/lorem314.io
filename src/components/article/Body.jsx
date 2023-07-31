@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   border: 1px solid transparent;
   background-color: var(--page-content-bg);
 
-  h2:first-of-type {
+  h2:first-child {
     margin-top: 1rem;
   }
 

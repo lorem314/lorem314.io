@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 
 import Tags from "./Tags"
+import { H1 } from "../../html/headings"
 
 const Wrapper = styled.header`
   padding: 0 1rem 1rem;
@@ -10,6 +11,7 @@ const Wrapper = styled.header`
   background-color: var(--page-content-bg);
 
   > .post-title {
+    margin-top: 1rem;
     color: var(--page-content-text-color-0);
   }
 
@@ -21,7 +23,7 @@ const Wrapper = styled.header`
 const Head = ({ frontmatter }) => {
   return (
     <Wrapper>
-      <h1 className="post-title">{frontmatter.title}</h1>
+      <H1 className="post-title">{frontmatter.title}</H1>
       <div className="tags-container">
         <Tags tags={frontmatter.tags} />
       </div>
