@@ -13,6 +13,7 @@ import DoubleArrowIcon from "../../svg/DoubleArrowIcon"
 
 import Details from "../../html/Details"
 import { justStopPropagation } from "../../utils/event"
+import { transition } from "../../utils/css"
 
 const Wrapper = styled.aside.attrs({
   id: "linked-toc",
@@ -25,6 +26,7 @@ const Wrapper = styled.aside.attrs({
   overflow: auto;
   padding: 10px;
   background-color: var(--page-content-bg);
+  ${transition("bg")}
 
   ul {
     list-style-type: none;
@@ -76,6 +78,7 @@ const cssDetailsHeader = css`
   flex-grow: 1;
   display: flex;
   align-items: center;
+  --svg-icon-size: 22px;
 
   > .details-title {
     flex-grow: 1;
@@ -88,19 +91,13 @@ const cssDetailsHeader = css`
   &:hover {
     > button {
       opacity: 0.5;
+      color: var(--page-content-text-color-1);
+
       &:hover {
         opacity: 1;
       }
     }
   }
-
-  /* > button {
-    opacity: 0.5;
-
-    &:hover {
-      opacity: 1;
-    }
-  } */
 `
 
 const DetailsHeaderInLinkedToc = styled.div`

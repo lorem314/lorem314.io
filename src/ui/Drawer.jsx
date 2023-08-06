@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import ReactDOM from "react-dom"
 import styled from "styled-components"
 
+import { justStopPropagation } from "../utils/event"
+
 const Drawer = ({
   isControlled = true,
   position = "left", // left, right, top or bottom
@@ -33,30 +35,36 @@ const Drawer = ({
 }
 
 export default Drawer
-
-// The [isOpen] state of this Drawer is controllered by its <Parent />.
-// children should be the drawer content component.
+/**
+ *  The [isOpen] state of this Drawer is controllered by React useState hook
+ *  created in his <Parent />.
+ *  children should be the drawer content component.
+ *  <Drawer isControlled={true}>
+ *    <Aside />
+ *  </Drawer>
+ */
 const ControlleredDrawer = ({ position, size, children, isOpen, onClose }) => {
-  return (
-    isOpen && (
-      <Portal position={position} size={size} onClose={onClose}>
-        {children}
-      </Portal>
-    )
-  )
+  return isOpen ? (
+    <Portal position={position} size={size} onClose={onClose}>
+      {children}
+    </Portal>
+  ) : null
 }
 
-// The [isOpen] state of this Drawer is controllered by itself.
-// children[0] should be a <button />
-// children[1] should be the drawer content component.
+/**
+ *  The [isOpen] state of this Drawer is controllered by itself.
+ *  children[0] should be a <button />
+ *  children[1] should be the drawer content component.
+ *  <Drawer isControlled={false}>
+ *    <button>Opener</button>
+ *    <Aside />
+ *  </Drawer>
+ */
 const UncontrolleredDrawer = ({ position, size, children }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const handleOpenDrawer = () => {
-    setIsOpen(true)
-  }
-  const handleCloseDrawer = () => {
-    setIsOpen(false)
-  }
+  const handleOpenDrawer = () => setIsOpen(true)
+  const handleCloseDrawer = () => setIsOpen(false)
+
   return (
     <>
       {React.cloneElement(children[0], { onClick: handleOpenDrawer })}
@@ -114,7 +122,7 @@ const Portal = ({ position, size, onClose, children }) => {
           ...getPositionProps(position, size),
           transform: styles.transform,
         }}
-        onClick={(event) => event.stopPropagation()}
+        onClick={justStopPropagation}
       >
         {React.cloneElement(children, { onCloseDrawer: handleCloseDrawer })}
       </div>

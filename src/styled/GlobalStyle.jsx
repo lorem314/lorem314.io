@@ -13,6 +13,7 @@ export const bp = {
 
   laptop: 1024,
   collapseTemplateBlogPostRightDrawer: 1024,
+  collapseTemplateBookChapterRightDraer: 1024,
 
   desktop: 1366,
   collapseLayoutLeftDrawer: 1366,
@@ -57,6 +58,10 @@ const GlobalStyle = styled.createGlobalStyle`
       --content-bg-0: #e5e5e5;
       --content-bg-1: #f7f7f7;
 
+      --inline-code-color: #c03e41;
+      --inline-code-bg: #e9eae5;
+
+      --ui-default-bg-hover: rgba(0, 0, 0, 0.05);
       --ui-default-border-color: rgba(58, 58, 58, 0.2);
       --ui-default-outline-color-focus: rgb(33, 112, 255);
 
@@ -76,6 +81,21 @@ const GlobalStyle = styled.createGlobalStyle`
 
       --ui-tooltip-color: #f7f7f7;
       --ui-tooltip-bg: rgba(0, 0, 0, 0.8);
+
+      --ui-godot-tip-title-color: #fff;
+      --ui-godot-tip-title-bg: #1abc9c;
+      --ui-godot-tip-content-color: #404040;
+      --ui-godot-tip-content-bg: #dbfaf4;
+
+      --ui-godot-note-title-color: #fff;
+      --ui-godot-note-title-bg: #6ab0de;
+      --ui-godot-note-content-color: #404040;
+      --ui-godot-note-content-bg: #e7f2fa;
+
+      --ui-godot-warning-title-color: #fff;
+      --ui-godot-warning-title-bg: #f0b37e;
+      --ui-godot-warning-content-color: #404040;
+      --ui-godot-warning-content-bg: #ffedcc;
     }
     &.dark {
       --header-bg: #1a2c42;
@@ -88,6 +108,17 @@ const GlobalStyle = styled.createGlobalStyle`
       --content-bg-0: #191919;
       --content-bg-1: #1e1e1e;
 
+      --inline-code-color: #d68f8f;
+      --inline-code-bg: #22252d;
+
+      // godot-ish color style
+      --page-content-text-color-1: rgba(255, 255, 255, 0.85); // ------
+      --page-content-bg: #2e3236; // -------------
+      --content-bg-0: #202326; // -----
+      --content-bg-1: #25282b; // ----
+      // godot-ish
+
+      --ui-default-bg-hover: rgba(255, 255, 255, 0.1);
       --ui-default-border-color: hsla(0, 0%, 61%, 0.2);
       --ui-default-outline-color-focus: rgb(132, 168, 201);
 
@@ -108,13 +139,28 @@ const GlobalStyle = styled.createGlobalStyle`
 
       --ui-tooltip-color: #181818;
       --ui-tooltip-bg: hsla(0, 0%, 78%, 0.9);
+
+      --ui-godot-tip-title-color: #dfd;
+      --ui-godot-tip-title-bg: #336648;
+      --ui-godot-tip-content-color: #dfd;
+      --ui-godot-tip-content-bg: #28382d;
+
+      --ui-godot-note-title-color: #bfeeff;
+      --ui-godot-note-title-bg: #305070;
+      --ui-godot-note-content-color: #bfeeff;
+      --ui-godot-note-content-bg: #303d4f;
+
+      --ui-godot-warning-title-color: #ffeeaf;
+      --ui-godot-warning-title-bg: #665022;
+      --ui-godot-warning-content-color: #ffeeaf;
+      --ui-godot-warning-content-bg: #444033;
     }
   }
 
   /* reset */
   a {
     text-decoration: none;
-    text-underline-offset: 4px;
+    text-underline-offset: 0.25rem;
     /* outline-offset: -1px; */
     color: var(--link-color);
     transition: color var(--theme-transition-props);

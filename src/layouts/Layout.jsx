@@ -9,6 +9,7 @@ import Drawer from "../ui/Drawer"
 import { useGlobalConfig } from "../contexts/GlobalConfigContext"
 import GlobalStyle, { bp, size } from "../styled/GlobalStyle"
 import { transition } from "../utils/css"
+import "../fonts/typography.css"
 
 const Wrapper = styled.div`
   > main {

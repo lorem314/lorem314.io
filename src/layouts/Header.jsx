@@ -5,6 +5,8 @@ import Logo from "./Logo"
 import SiteSearchModalButton from "./SiteSearchModalButton"
 import SocialLinks from "./SocialLinks"
 import Theme from "./Theme"
+import Modal from "../ui/Modal"
+import SiteSearchModal from "./SiteSearchModal"
 
 import MenuIcon from "../svg/MenuIcon"
 import { transition } from "../utils/css"
@@ -69,7 +71,10 @@ const Header = ({
 
       <div className="logo-and-site-search">
         <Logo />
-        <SiteSearchModalButton />
+        <Modal isControlled={false}>
+          <SiteSearchModalButton />
+          <SiteSearchModal />
+        </Modal>
       </div>
 
       <div className="social-links-and-theme">
@@ -86,13 +91,17 @@ const getRightDrawerBreakPoint = (location) => {
   if (!location) return 0
 
   // splitted pathname
-  const sp = location?.pathname?.split("/")
+  const sp = location?.pathname?.split("/") || []
+
   if (sp.length === 3 && sp.includes("blog")) {
     // template blog post
     return bp.collapseTemplateBlogPostRightDrawer
   } else if (sp.length === 2 && sp.includes("blog")) {
     // page blog
     return bp.collapsePageBlogRightDrawer
+  } else if (sp.length === 4 && sp.includes("book")) {
+    // template book chapter
+    return bp.collapseTemplateBookChapterRightDraer
   } else {
     return 0
   }

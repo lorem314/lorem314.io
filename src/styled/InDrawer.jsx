@@ -4,7 +4,12 @@ import styled from "styled-components"
 import CloseIcon from "../svg/CloseIcon"
 
 const Wrapper = styled.aside`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   > header {
+    flex: 0 0 var(--header-height);
     height: var(--header-height);
     color: whitesmoke;
     background-color: var(--header-bg);
@@ -18,6 +23,7 @@ const Wrapper = styled.aside`
       font-size: 1rem;
       margin: 0;
     }
+
     > .close-drawer-button {
       background: none;
       border: none;
@@ -30,7 +36,8 @@ const Wrapper = styled.aside`
   }
 
   > .children {
-    margin: 1rem 0.5rem;
+    flex: 1 1 auto;
+    background-color: var(--page-content-bg);
   }
 `
 
@@ -47,7 +54,7 @@ const InDrawer = ({
           <CloseIcon />
         </button>
       </header>
-      <section className="children">{children}</section>
+      <div className="children">{children}</div>
     </Wrapper>
   )
 }

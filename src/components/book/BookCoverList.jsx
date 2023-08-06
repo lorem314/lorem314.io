@@ -30,14 +30,6 @@ const BookCoverList = ({ bookCovers = [] }) => {
           />
         )
       })}
-      {bookCovers.map((bookCover) => {
-        return (
-          <BookCoverItem
-            key={bookCover.frontmatter.isbn}
-            bookCover={bookCover}
-          />
-        )
-      })}
     </Wrapper>
   )
 }

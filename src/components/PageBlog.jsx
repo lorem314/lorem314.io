@@ -35,6 +35,10 @@ const Wrapper = styled.div`
   }
   .tags-container {
   }
+  > section[class$="container"] {
+    padding: 10px;
+    background-color: var(--page-content-bg);
+  }
 
   @media screen and (max-width: ${bp.collapsePageBlogRightDrawer}px) {
     > .form-container {
@@ -105,7 +109,7 @@ const PageBlog = ({ allBlogPost = [] }) => {
 
   return (
     <Wrapper>
-      <div className="form-container page-content">
+      <section className="form-container">
         <Search value={searchTerm} onChange={handleChangeSearchTerm} />
         <Select
           selectedTags={selectedTags}
@@ -115,12 +119,12 @@ const PageBlog = ({ allBlogPost = [] }) => {
           isOrLogic={isOrLogic}
           toggleFilterLogic={toggleFilterLogic}
         />
-      </div>
+      </section>
 
-      <div className="posts-container page-content">
+      <section className="posts-container">
         <div className="page-content-title">博客 ({posts.length})</div>
         <PostList posts={posts} />
-      </div>
+      </section>
 
       <MediaQuery query={`(max-width: ${bp.collapsePageBlogRightDrawer}px)`}>
         <Drawer isControlled={false} position="right">
@@ -135,14 +139,14 @@ const PageBlog = ({ allBlogPost = [] }) => {
             />
           </InDrawer>
         </Drawer>
-        <div className="tags-container page-content">
+        <section className="tags-container">
           <div className="page-content-title">所有标签 ({tags.length})</div>
           <AllTag
             tags={tags}
             selectedTags={selectedTags}
             onSelectTag={handleSelectTag}
           />
-        </div>
+        </section>
       </MediaQuery>
     </Wrapper>
   )

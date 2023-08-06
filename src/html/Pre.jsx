@@ -5,13 +5,12 @@ import rangeParser from "parse-numeric-range"
 
 import CopyCodeIcon from "../svg/CopyCodeIcon"
 import { showNotification } from "../ui/Notification"
-import "../fonts/typography.css"
 import { clsx } from "../utils/css"
 
 const Wrapper = styled.div`
   background-color: #011627;
   border-radius: 0.5rem;
-  margin: 2rem 0;
+  margin: 1rem 0;
 
   > .header {
     position: relative;
@@ -19,11 +18,11 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 10px;
     user-select: none;
-    font-family: "FiraCode Regular", monospace;
+    font-family: "FiraCode-Regular", monospace;
     padding-top: 0.5rem;
 
     > .language-type {
-      background-color: white;
+      /* background-color: rgba(0, 0, 0, 0.1); */
       font-weight: bolder;
       padding: 0.25rem 0.5rem;
       display: flex;
@@ -32,7 +31,7 @@ const Wrapper = styled.div`
       text-transform: uppercase;
       border-bottom-left-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
-      font-size: 1.25rem;
+      font-size: 1em;
     }
     > .code-title {
       color: #9d9d9d;
@@ -41,15 +40,18 @@ const Wrapper = styled.div`
       align-items: center;
     }
     > .copy-code-button {
-      background: none;
+      /* background: none; */
+      font-size: smaller;
+      padding: 0.5em;
+      border-radius: 0.25rem;
       border: none;
-      --svg-icon-size: 24px;
+      --svg-icon-size: 1.5em;
+
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
+
       color: whitesmoke;
-      padding: 0.5rem;
-      border-radius: 0.25rem;
       background-color: rgba(255, 255, 255, 0.1);
       &:hover {
         background-color: rgba(255, 255, 255, 0.2);
@@ -60,23 +62,29 @@ const Wrapper = styled.div`
     overflow: auto;
     background-color: #011627;
     border-radius: 0.5rem;
+
     > pre {
-      font-family: "FiraCode Regular", monospace;
+      font-family: "FiraCode-Regular", monospace;
       width: 100%;
       color: #d6deeb;
-      /* color: rgb(79, 193, 255); */
 
       > .token-line {
         padding-left: 1rem;
         color: #d6deeb;
         display: block;
         width: 100%;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+
         > .line-number {
           display: inline-block;
           text-align: right;
           margin-right: 1rem;
         }
       }
+
       > .token-line.highlighted {
         background-color: #00f5c426;
       }
@@ -109,8 +117,19 @@ const copyToClipboard = (str) => {
   }
 }
 
+const hasHighlightComment = (line) => {
+  const idx = line.findIndex((token) => token.content === "// highlight-line")
+  console.log("idx ", idx)
+  if (idx !== -1) {
+    line.splice(idx, 1)
+    return true
+  } else {
+    return false
+  }
+}
+
 const Pre = (props) => {
-  console.log(props)
+  console.log("Pre props : ", props)
 
   const [isCopied, setIsCopied] = useState(false)
   const className = props.children.props.className || ""
@@ -127,7 +146,7 @@ const Pre = (props) => {
         {language ? <div className="language-type">{language}</div> : null}
         {title ? <div className="code-title">{title}</div> : null}
         <button
-          className="copy-code-button"
+          className="copy-code-button goast"
           title="复制代码"
           onClick={() => {
             copyToClipboard(code)
@@ -147,23 +166,24 @@ const Pre = (props) => {
           theme={themes.nightOwl}
         >
           {({ className, style, tokens, getLineProps, getTokenProps }) => {
-            const totalLineNumber =
-              tokens.length.toString().split("").length || 0
-            console.log("tokens :", tokens)
+            const totalLine = tokens.length.toString().split("").length || 0
+            // console.log("tokens :", tokens)
             return (
               <pre className={className}>
                 {tokens.map((line, i) => {
+                  const highlighted = hasHighlightComment(line)
+                  console.log(`line ${i + 1} (${highlighted}):`, line)
                   return (
                     <div
                       key={i}
                       className={clsx({
                         "token-line": true,
-                        highlighted: highlights(i),
+                        highlighted: highlighted || highlights(i),
                       })}
                     >
                       <span
                         className="line-number"
-                        style={{ width: `${10 * totalLineNumber}px` }}
+                        style={{ width: `${10 * totalLine}px` }}
                       >
                         {i + 1}
                       </span>

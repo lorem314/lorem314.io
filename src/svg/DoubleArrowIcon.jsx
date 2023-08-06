@@ -1,12 +1,14 @@
 import React from "react"
+import styled from "styled-components"
 import Svg from "./Svg"
 
 const DoubleArrowIcon = ({ ...props }) => {
   const values = getValues(props.variant)
+  const style = { strokeWidth: "2px", stroke: "var(--ui-svg-icon-color)" }
   return (
     <Svg viewBox="0 0 24 24" {...props} fill="none">
-      <path strokeWidth={2} stroke="#33363F" d={values[0]} />
-      <path strokeWidth={2} stroke="#33363F" d={values[1]} />
+      <path style={style} d={values[0]} />
+      <path style={style} d={values[1]} />
     </Svg>
   )
 }

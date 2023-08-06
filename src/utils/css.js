@@ -1,10 +1,13 @@
 const cssPropMapper = {
   color: "color",
+  opacity: "opacity",
+  fill: "fill",
+
   bg: "background-color",
   bdc: "border-color",
   olc: "outline-color",
-  opacity: "opacity",
-  fill: "fill",
+  fs: "font-size",
+  mg: "margin",
 }
 
 export const transition = (...props) => {

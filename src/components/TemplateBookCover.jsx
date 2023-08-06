@@ -9,6 +9,7 @@ import Details from "../html/Details"
 const Wrapper = styled(PageContent)`
   margin: 2rem auto;
   max-width: 36rem;
+  padding: 1rem 0.75rem;
 
   /* > .page-content-title {
     margin-bottom: 1rem;
@@ -20,7 +21,8 @@ const Wrapper = styled(PageContent)`
   }
 
   > .book-chapter-list {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+
     > .book-chapter-item {
       padding: 0 12.5%;
       margin: 1rem 0;
@@ -39,10 +41,12 @@ const TemplateBookCover = ({ bookCover, bookChapters = [] }) => {
       </h2> */}
 
       <div className="book-cover-info">
-        <GatsbyImage image={coverImage} alt="书籍封面" />
+        <div className="book-cover-container" style={{ flex: "0 1 250px" }}>
+          <GatsbyImage image={coverImage} alt="书籍封面" />
+        </div>
         <div style={{ flex: "1 0 auto" }}>
-          <h3>{bookCover.frontmatter.title}</h3>
-          <h4>{bookCover.frontmatter.subtitle}</h4>
+          <h2>{bookCover.frontmatter.title}</h2>
+          <h3>{bookCover.frontmatter.subtitle}</h3>
           <p>ISBN:{bookCover.frontmatter.isbn}</p>
         </div>
       </div>
@@ -52,9 +56,11 @@ const TemplateBookCover = ({ bookCover, bookChapters = [] }) => {
           const { title, chapter } = bookChapter.frontmatter
           return (
             <div className="book-chapter-item" key={chapter}>
-              <Details open>
+              <Details>
                 <div style={{ fontWeight: "bolder" }}>
-                  第 {chapter} 章 {title}
+                  <Link to={bookChapter.fields.slug}>
+                    第 {chapter} 章 {title}
+                  </Link>
                 </div>
                 <div>tree</div>
               </Details>

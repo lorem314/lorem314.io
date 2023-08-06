@@ -9,7 +9,9 @@ const Svg = styled.svg.attrs({
 
   .icon {
     fill: currentColor;
-    transition: fill var(--theme-transition-props);
+    /* stroke: currentColor; */
+    transition: fill var(--theme-transition-props),
+      stroke var(--theme-transition-props);
   }
 `
 

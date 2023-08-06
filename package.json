@@ -21,6 +21,9 @@
     "#src/*": {
       "default": "./src/*"
     },
+    "#html/*": {
+      "default": "./src/html/*"
+    },
     "#tool/*": {
       "default": "./src/components/tool/*"
     }

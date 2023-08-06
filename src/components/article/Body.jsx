@@ -6,24 +6,34 @@ import styled from "styled-components"
 import { H2, H3, H4, H5, H6 } from "../../html/headings"
 import P from "../../html/P"
 import Pre from "../../html/Pre"
-// import "prismjs/themes/prism-solarizedlight.css"
+import { U, Strong } from "../../html/inline-element"
+import { Blockquote, Ul, Ol } from "../../html/block-element"
+
+import { transition } from "../../utils/css"
 
 const Wrapper = styled.div`
   padding: 10px 2rem;
   border: 1px solid transparent;
   background-color: var(--page-content-bg);
+  ${transition("bg")}
+
+  font-size: 1.125rem;
+  /* font-family: "FiraCode Regular"; */
+  font-family: "Segoe-Regular";
 
   h2:first-child {
     margin-top: 1rem;
   }
 
   code {
-    color: red;
-    background-color: rgba(0, 0, 0, 0.1);
-    font-size: 0.9em;
-    padding: 0.05em 0.1em;
-    margin: 0 0.1em;
-    border-radius: 0.1em;
+    font-size: 0.875em;
+    padding: 3px 5px;
+    border-radius: 0.125em;
+    font-family: "FiraCode-Regular", monospace;
+
+    color: var(--inline-code-color);
+    background-color: var(--inline-code-bg);
+    ${transition("color", "bg")}
   }
 `
 
@@ -35,6 +45,12 @@ const components = {
   h5: (props) => <H5 {...props} />,
   h6: (props) => <H6 {...props} />,
   pre: (props) => <Pre {...props} />,
+  blockquote: (props) => <Blockquote {...props} />,
+  ul: (props) => <Ul {...props} />,
+  ol: (props) => <Ol {...props} />,
+
+  u: (props) => <U {...props} />,
+  // strong: (props) => <Strong {...props} />,
 }
 
 const Body = ({ body = null }) => {

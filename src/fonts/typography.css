@@ -1,4 +1,14 @@
 @font-face {
-  font-family: "FiraCode Regular";
+  font-family: "FiraCode-Regular";
   src: url("./FiraCode-Regular.otf");
+}
+
+@font-face {
+  font-family: "Segoe-Regular";
+  src: url("./Segoe-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Segoe-Italic";
+  src: url("./Segoe-Italic.ttf");
 }

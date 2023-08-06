@@ -1,42 +1,59 @@
 import React from "react"
 import styled, { css } from "styled-components"
+
 import HeadingIcon from "../svg/HeadingIcon"
 import { bp } from "../styled/GlobalStyle"
+import { transition } from "../utils/css"
 
-const sharedStyles = css`
+const cssHeadings = css`
   --svg-icon-size: 1.25rem;
-  color: var(--page-content-text-color-0);
   margin-top: 2em;
-  transition: font-size 0.25s ease-in-out, margin 0.25s ease-in-out;
 
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: 0.25em;
 
-  > .autolink-anchor {
-    > .link-icon {
+  color: var(--page-content-text-color-0);
+  ${transition("color", "fs", "mg")}
+
+  > a.autolink-anchor {
+    padding-left: 0;
+
+    > svg.link-icon {
+      opacity: 0.5;
       width: 1.25em;
       height: 1.25em;
-      transform: translateY(0.25rem);
+      transform: translateY(0.125em);
+
       .icon {
         fill: var(--link-color);
       }
     }
+
+    &:hover {
+      > svg.link-icon {
+        opacity: 1;
+      }
+    }
   }
 
-  @media screen and (max-width: ${bp.tablet}px) {
+  @media screen and (max-width: ${bp.laptop}px) {
     margin-top: 1.75em;
   }
-  @media screen and (max-width: ${bp.mobile}px) {
+  @media screen and (max-width: ${bp.tablet}px) {
     margin-top: 1.5em;
   }
 `
 
 const StyledH1 = styled.h1`
-  ${sharedStyles}
-  font-size: 2.125rem;
-  @media screen and (max-width: ${bp.mobile}px) {
-    font-size: 1.5rem;
+  ${cssHeadings}
+  font-size: 2.125em;
+  @media screen and (max-width: ${bp.laptop}px) {
+    font-size: 1.875em;
+  }
+  @media screen and (max-width: ${bp.tablet}px) {
+    font-size: 1.725em;
   }
 `
 export const H1 = (props) => {
@@ -49,13 +66,13 @@ export const H1 = (props) => {
 }
 
 const StyledH2 = styled.h2`
-  ${sharedStyles}
-  font-size: 1.875rem;
-  @media screen and (max-width: ${bp.tablet}px) {
-    font-size: 1.5rem;
+  ${cssHeadings}
+  font-size: 1.875em;
+  @media screen and (max-width: ${bp.laptop}px) {
+    font-size: 1.625em;
   }
-  @media screen and (max-width: ${bp.mobile}px) {
-    font-size: 1.25rem;
+  @media screen and (max-width: ${bp.tablet}px) {
+    font-size: 1.25em;
   }
 `
 export const H2 = (props) => {
@@ -68,13 +85,13 @@ export const H2 = (props) => {
 }
 
 const StyledH3 = styled.h3`
-  ${sharedStyles}
-  font-size: 1.5rem;
-  @media screen and (max-width: ${bp.tablet}px) {
-    font-size: 1.25rem;
+  ${cssHeadings}
+  font-size: 1.5em;
+  @media screen and (max-width: ${bp.laptop}px) {
+    font-size: 1.25em;
   }
-  @media screen and (max-width: ${bp.mobile}px) {
-    font-size: 1.125rem;
+  @media screen and (max-width: ${bp.tablet}px) {
+    font-size: 1.125em;
   }
 `
 export const H3 = (props) => {
@@ -87,13 +104,13 @@ export const H3 = (props) => {
 }
 
 const StyledH4 = styled.h4`
-  ${sharedStyles}
-  font-size: 1.25rem;
-  @media screen and (max-width: ${bp.tablet}px) {
-    font-size: 1.125rem;
+  ${cssHeadings}
+  font-size: 1.25em;
+  @media screen and (max-width: ${bp.laptop}px) {
+    font-size: 1.125em;
   }
-  @media screen and (max-width: ${bp.mobile}px) {
-    font-size: 1.125rem;
+  @media screen and (max-width: ${bp.tablet}px) {
+    font-size: 1em;
   }
 `
 export const H4 = (props) => {
@@ -106,13 +123,13 @@ export const H4 = (props) => {
 }
 
 const StyledH5 = styled.h5`
-  ${sharedStyles}
-  font-size: 1.125rem;
-  @media screen and (max-width: ${bp.tablet}px) {
-    font-size: 1rem;
+  ${cssHeadings}
+  font-size: 1.125em;
+  @media screen and (max-width: ${bp.laptop}px) {
+    font-size: 1em;
   }
-  @media screen and (max-width: ${bp.mobile}px) {
-    font-size: 1.125rem;
+  @media screen and (max-width: ${bp.tablet}px) {
+    font-size: 1em;
   }
 `
 export const H5 = (props) => {
@@ -125,13 +142,13 @@ export const H5 = (props) => {
 }
 
 const StyledH6 = styled.h6`
-  ${sharedStyles}
-  font-size: 1rem;
-  @media screen and (max-width: ${bp.tablet}px) {
-    font-size: 1rem;
+  ${cssHeadings}
+  font-size: 1em;
+  @media screen and (max-width: ${bp.laptop}px) {
+    font-size: 1em;
   }
-  @media screen and (max-width: ${bp.mobile}px) {
-    font-size: 1.125rem;
+  @media screen and (max-width: ${bp.tablet}px) {
+    font-size: 1em;
   }
 `
 export const H6 = (props) => {

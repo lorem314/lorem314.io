@@ -41,9 +41,10 @@ const Wrapper = styled.aside`
     position: fixed;
     right: 2rem;
     bottom: 1rem;
-    background-color: var(--content-bg-0);
     padding: 0.5rem;
     border-radius: 0.25rem;
+    background-color: var(--content-bg-0);
+    ${transition("bg")}
   }
 `
 

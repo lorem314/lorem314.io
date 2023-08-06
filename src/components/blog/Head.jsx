@@ -3,15 +3,17 @@ import styled from "styled-components"
 
 import Tags from "./Tags"
 import { H1 } from "../../html/headings"
+import { transition } from "../../utils/css"
 
 const Wrapper = styled.header`
   padding: 0 1rem 1rem;
   border: 1px solid transparent;
   margin-bottom: 10px;
   background-color: var(--page-content-bg);
+  ${transition("bg")}
 
   > .post-title {
-    margin-top: 1rem;
+    margin: 1rem 0;
     color: var(--page-content-text-color-0);
   }
 

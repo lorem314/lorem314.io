@@ -8,7 +8,7 @@ id: "dc7b1254f1f253963e2cdede12135043"
 
 ## 舰船类型
 
-```jsx title=./path/to/folder/then/custom-pre-element.jsx highlights=1,3,7-9 showCopyButton=false
+```jsx title=./path/to/folder/then/custom-pre-element.jsx
 import React from "react"
 import Highlight, { defaultProps } from "prism-react-renderer"
 import theme from "prism-react-renderer/themes/nightOwl"
@@ -19,10 +19,11 @@ const calculateLinesToHighlight = (raw) => {
   if (lineNumbers) {
     return (index) => lineNumbers.includes(index + 1)
   } else {
-    return () => false // comment
+    return () => false // highlight-line
   }
 }
 const Code = () => {
+  // highlight-next-line
   return null
 }
 export default Code
