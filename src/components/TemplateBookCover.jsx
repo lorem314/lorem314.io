@@ -3,17 +3,13 @@ import { Link } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import styled from "styled-components"
 
-import PageContent from "../styled/PageContent"
 import Details from "../html/Details"
+import PlainToc from "./book/PlainToc"
 
-const Wrapper = styled(PageContent)`
+const Wrapper = styled.section`
   margin: 2rem auto;
   max-width: 36rem;
   padding: 1rem 0.75rem;
-
-  /* > .page-content-title {
-    margin-bottom: 1rem;
-  } */
 
   > .book-cover-info {
     display: flex;
@@ -35,10 +31,10 @@ const TemplateBookCover = ({ bookCover, bookChapters = [] }) => {
 
   return (
     <Wrapper className="page-content">
-      {/* <h2 className="page-content-title">
-        <span>{bookCover.frontmatter.title}</span>
+      <h2 className="page-content-title">
+        <span>{bookCover.frontmatter.title}</span>{" "}
         <span>{bookCover.frontmatter.subtitle}</span>
-      </h2> */}
+      </h2>
 
       <div className="book-cover-info">
         <div className="book-cover-container" style={{ flex: "0 1 250px" }}>
@@ -62,7 +58,9 @@ const TemplateBookCover = ({ bookCover, bookChapters = [] }) => {
                     第 {chapter} 章 {title}
                   </Link>
                 </div>
-                <div>tree</div>
+                <div>
+                  <PlainToc tableOfContents={bookChapter.tableOfContents} />
+                </div>
               </Details>
             </div>
           )

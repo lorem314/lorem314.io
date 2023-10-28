@@ -1,7 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react"
 import styled from "styled-components"
 
-import useToggle from "../hooks/useToggle"
 import ChevronIcon from "../svg/ChevronIcon"
 import { transition } from "../utils/css"
 
@@ -10,7 +9,7 @@ const DetailsWrapper = styled.details`
     display: flex;
     align-items: center;
     gap: 0.25em;
-    color: var(--page-content-text-color-0);
+    color: var(--content-text-color-0);
     ${transition("color")}
 
     cursor: pointer;
@@ -18,7 +17,7 @@ const DetailsWrapper = styled.details`
 
     > .details-toggler {
       opacity: 0.5;
-      color: var(--page-content-text-color-1);
+      color: var(--content-text-color-1);
       ${transition("color")}
       --svg-icon-size: 18px;
 

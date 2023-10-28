@@ -7,7 +7,7 @@ const StyledP = styled.p`
   letter-spacing: 0.25px;
   font-size: 1em;
   line-height: 1.5;
-  margin: 1.5em 0;
+  margin: 1.125em 0;
 
   /* @media screen and (max-width: ${bp.laptop}px) {
     font-size: 1.125em;

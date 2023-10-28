@@ -1,0 +1,190 @@
+---
+title: "Re:从零编写 EventEmitter 库"
+createdAt: "2022-06-10"
+tags: ["NodeJS", "JavaScript", "Re:从零系列"]
+
+id: "b3e886a1e0ee72c2ae1ed0f03c87c888"
+---
+
+## DOM 中的事件
+
+在 DOM 中，为了能使一个按钮正常工作，我们一般会为其 onClick 属性赋值为一个函数，就像如下这样
+
+```js
+const myButton = document.getElementById("my-button")
+
+myButton.onclick = function handleClick(e) {
+  console.log("clicked")
+}
+```
+
+或是更通用一些，在该按钮上监听 click 事件
+
+```js
+const myButton = document.getElementById("my-button")
+
+myButton.addEventListener("click", function handleClick(e) {
+  console.log("clicked")
+})
+```
+
+使用 addEventListener 的好处是，我们可以添加任意多个事件函数，元素接收到事件后，便会按照注册顺序，依次执行事件函数。
+
+```js
+const myButton = document.getElementById("my-button")
+
+myButton.addEventListener("click", function handleClick1(e) {
+  console.log("1 clicked")
+})
+
+myButton.addEventListener("click", function handleClick2(e) {
+  console.log("2 clicked")
+})
+```
+
+在 Node.js 中也有<a href="https://nodejs.org/api/events.html#events" target="_black">Event Emitter</a>库，支持自定义事件机制。
+
+```js
+const EventEmitter = require("node:events")
+
+const myEmitter = new EventEmitter()
+
+myEmitter.on("event", () => {
+  console.log("an event occurred!")
+})
+myEmitter.emit("event")
+```
+
+通过继承示例化一个 EventEmitter 示例，我们可以在其上监听 event 事件，并传入一个函数，每当 event 事件被触发，则执行对应的函数，同样，我们可以针对一个事件添加多个事件函数。
+
+## JavaScript 代码实现
+
+在接下来的文章中，我们将创建一个简易的 EventEmitter 库。
+
+类中有 4 个方法
+
+1. 用 on(type, listener)函数来添加事件监听，同一事件可以添加多个事件函数
+2. 用 off(type, listener)函数来取消事件监听，
+3. 用 emit(type, [...args])函数来执行对应的已添加的事件函数
+4. 用 once(type, listener)函数添加事件监听，该监听在执行了一次 emit 后自动 off
+
+### 数据结构
+
+我们将所有的事件都存在一个 object 中，它大概长这个样子
+
+```js
+const events = {
+  type1: [listener1, listener2],
+  type2: [listener1],
+}
+```
+
+如上，创建一个 object，存储键值对，键为对应的事件类型 type 的值；值为一个数组，其中的每个元素均为函数，即事件函数。之后声明四个函数，最后通过 module.exports 导出。
+
+```js
+var events = {}
+
+function on(type, listener) {}
+function off(type, listener) {}
+function emit(type, ...rest) {}
+function once(type, listener) {}
+
+module.exports = {
+  on: on,
+  off: off,
+  emit: emit,
+  once: once,
+}
+```
+
+接下来我们来具体考察实现方法。
+
+### on 方法
+
+我们使用 on 方法为某一事件类型 type 注册事件函数。首先我们需要检查 events 中是否存在 type，没有的话则初始化其值为一个空数组；否则直接在其值的事件函数数组的末尾添加一个事件函数。
+
+```jsx
+function on(type, listener) {
+  if (!events[type]) {
+    events[type] = []
+  }
+  events[type].push(listener)
+}
+```
+
+### off 方法
+
+我们使用 off 方法来解除对某一事件类型 type 的监听。如需解除监听，传入的函数参数应该和使用 on 方法注册事件函数时的函数是同一个引用。先确保 events 中存在针对 type 类型的事件函数数组，通过 indexOf 数组方法找到注册时用到的监听函数的位置，若找到，则使用 splice 数组方法在对应位置删除一个元素，即需要解除的事件监听函数。
+
+```jsx
+function off(type, listener) {
+  if (events[type]) {
+    let idx = events[type].indexOf(listener)
+    if (idx > -1) {
+      events[type].splice(idx, 1)
+    }
+  }
+}
+```
+
+### emit 方法
+
+我们使用 emit 方法来触发某一 type 事件，并执行其数组中的所有函数，同时将调用 emit 时的参数也传入到所有数组函数中执行。
+
+第一个参数为事件类型 type，其余为需要传入到事件函数中的参数，我们使用剩余参数来获取所有剩余的参数。先确保 events 中存在针对 type 事件的数组，之后使用 forEach 遍历所有事件函数，并将剩余参数作为参数执行。
+
+```jsx
+function emit(type, ...rest) {
+  if (events[type]) {
+    events[type].forEach(function (listener) {
+      listener(...rest)
+    })
+  }
+}
+```
+
+### once 方法
+
+我们使用 once 方法，注册一个触发了一次后自动解除的事件监听。once 方法的实现可以直接使用以上方法组合而成。
+
+在 once 方法中，我们使用 on 方法添加一个事件，并在事件函数回调中，首先执行通过 once 传入的监听函数，之后便使用 off 方法将事件监听解除。on 方法传入的回调函数 runOnlyOnceWhenEmit 中的 rest 参数，是当我们使用 emit 触发事件时，传入的参数。
+
+```jsx
+function once(type, listener) {
+  on(type, function runOnlyOnceWhenEmit(...rest) {
+    listener(...rest)
+    off(type, runOnlyOnceWhenEmit)
+  })
+}
+```
+
+## 测试
+
+将如上代码保存到名为 MyEventListener.js 中，并在其他文件中导入
+
+```jsx
+var MyEventEmitter = require("./MyEventListener.js")
+
+MyEventEmitter.on("log", async function (data) {
+  await Promise.resolve().then(() => {
+    console.log("Log event emitter 1: ", data)
+  })
+})
+
+MyEventEmitter.on("log", function (data) {
+  console.log("Log event emitter 2: ", data)
+})
+
+MyEventEmitter.emit("log", "show me your code")
+```
+
+输出结果如下
+
+```bash
+Log event emitter 2:  show me your code
+Log event emitter 1:  show me your code
+```
+
+## 参考文章
+
+- [https://gist.github.com/mudge/5830382](https://gist.github.com/mudge/5830382)

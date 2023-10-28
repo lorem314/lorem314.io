@@ -100,7 +100,7 @@ const NotificationItemWrapper = styled.div`
   position: relative;
 
   transform: translateX(${({ $offsetX }) => $offsetX}%);
-  color: var(--page-content-text-color-1);
+  color: var(--content-text-color-1);
   background-color: var(--page-content-bg);
 
   transition: transform 500ms ease-in-out, color var(--theme-transition-props),

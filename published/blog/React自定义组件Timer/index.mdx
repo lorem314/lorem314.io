@@ -1,0 +1,225 @@
+---
+title: "React 自定义组件 Timer"
+createdAt: "2023-01-08"
+tags: ["React", "自定义组件"]
+
+id: "d52e965e6573d914737ee2bc1ff3f50c"
+summary: "基于 React 的自定义计时器组件。"
+---
+
+本篇博客中，我们将介绍如可用 React 开发一个计时器组件。该组件将在指定的时间内，按照指定的步长，走过指定的数字范围。
+
+## 组件签名
+
+使用组件时，我们可以按以下方式：
+
+```jsx
+const App = () => {
+  return (
+    <div>
+      还剩下
+      <Timer
+        start={60}
+        end={0}
+        step={-1}
+        duration={60000}
+        onTimeup={() => {
+          console.log("时间到")
+        }}
+      />秒
+    </div>
+  )
+}
+```
+
+如上例子中的计时器将在 60 秒内，每秒钟计数器减少 1 的速度，从 60 走到 0，也就是一个 1 分钟倒计时。Timer 组件的位置将自动替换为数字，插入到句子中。
+
+我们还希望支持**函数子组件**的写法，就像如下这样：
+
+```jsx
+const App = () => {
+  return (
+    <div>
+      <Timer>{(time) => `还剩下${time}秒`}</Timer>
+    </div>
+  )
+}
+```
+
+如上例子中 Timer 组件的子组件是一个函数，该函数接受的参数 time 为计时器的秒数。
+
+### 参数
+
+Timer 组件接收如下参数：
+
+- `start` —— 计时器计数的起点
+- `end` —— 计时器计数的终点
+- `step` —— 计时器数字变动时，每次变动的步长。当 start 大于 end 时，该值应小于零，反之则大于零。
+- `duration` —— 从 start 变动到 end，总共需要的时长，单位为毫秒
+- `isTiming` —— 指示是否正在计时
+- `onTimeup` —— 计时完成后的回调函数，会在计时结束时运行
+- `children` —— 子组件
+
+下面我们给出组件的大致框架，并给出参数的默认值。
+
+```jsx
+const Timer = ({
+  start = 60,
+  end = 0,
+  step = -1,
+  duration = 60000,
+  isTiming = true,
+  onTimeup = () => {},
+  children,
+}) => {
+  return // ...
+}
+```
+
+## 实现
+
+### 用 setInterval 计数
+
+不同于原生 JavaScript，在 React 组件中使用 setTimeout 或 setInterval 函数需要一些特殊技巧。
+
+```jsx
+const Timer = ({}) => {
+  const [counter, setCounter] = useState(start)
+
+  useEffect(() => {
+    let tid
+    tid = setInterval(() => {
+      setCounter((prevCounter) => {
+        if (
+          (step < 0 && prevCounter > end) ||
+          (step > 0 && prevCounter < end)
+        ) {
+          return prevCounter + step
+        } else {
+          onTimeup()
+          clearInterval(tid)
+          return prevCounter
+        }
+      })
+    }, delay)
+
+    return () => clearInterval(tid)
+  }, [delay])
+
+  return // ...
+}
+```
+
+我们用 useState 初始化一个计数用的值，初始值为传入的参数 start。
+
+在 useEffect 中使用 setInterval，来每隔一段时间更新 counter 的值。setInterval 的第二个参数 delay，我们可以根据如下等式进行计算。
+
+```text
+计数器变动一次 所需时间    计数器完成计数 所需时间
+-------------------- = --------------------
+计数器变动一次 变动数值    计数器完成计数 变动数值
+```
+
+计数器变动一次所需时间，即为 delay，每经过 delay 所指示的时长，计数器变动一次，所变动的数值为提供的参数 step。计数器完成计数所需时间为参数 duration，计数器完成计数，数值总共变动为参数 start 与 end 的差值。
+
+故 setInterval 的第二参数 delay 应为：
+
+```text
+        duration * step
+delay = ----------------
+           end - start
+```
+
+我们用 useMemo 来记录该值：
+
+```jsx
+const delay = useMemo(
+  () => (duration * step) / (end - start),
+  [start, end, step, duration]
+)
+```
+
+在之后的组件更新中，参与运算的任何一个数值有变动时，重新计算该值。（设计意图内的考虑是，尽量不变动这 4 个数值，可变动的只有 isTiming，可在 Timer 的父组件中暂停计时）
+
+### 返回值
+
+Timer 组件的返回值，为了支持函数子组件，我们先判断 children 的类型是否为函数，是则传入当前渲染周期中的计数值 counter，返回函数结果；否则直接返回计数值。
+
+```js
+return typeof children === "function" ? children(counter) : counter
+```
+
+### 外部控制
+
+刚才也提到过，组件参数中有 isTiming 的目的是，能够从 Timer 组件的父组件中控制计时器。
+
+这里应该对 useEffect 中的逻辑进行修改，如果 isTiming 为 true，才执行计时逻辑。
+
+```jsx
+useEffect(() => {
+  let tid
+  // highlight-next-line
+  if (isTiming) {
+    tid = setInterval(() => {
+      setCounter((prevCounter) => {
+        if (
+          (step < 0 && prevCounter > end) ||
+          (step > 0 && prevCounter < end)
+        ) {
+          return prevCounter + step
+        } else {
+          onTimeup()
+          clearInterval(tid)
+          return prevCounter
+        }
+      })
+    }, delay)
+  }
+
+  return () => clearInterval(tid)
+  // highlight-next-line
+}, [isTiming, delay])
+```
+
+同时也将 isTiming 加入到 useEffect 的依赖数组中。
+
+至此，该组件还有一个小瑕疵。当完成计时后，在外部切换计时器的状态，每次将 isTiming 切换到 true 后都会触发 onTimeup 回调函数，该回调应该只在计数完成时调用一次。
+
+我们还需要在 Timer 组件中添加一个状态：
+
+```js
+const [isTimeup, setIsTimeup] = useState(false)
+```
+
+用于指示 Timer 组件是否已经完成计时，同时在完成计时后，将值改为 true。
+
+```jsx
+useEffect(() => {
+  let tid
+  if (isTiming) {
+    tid = setInterval(() => {
+      setCounter((prevCounter) => {
+        if (
+          (step < 0 && prevCounter > end) ||
+          (step > 0 && prevCounter < end)
+        ) {
+          return prevCounter + step
+        } else {
+          // highlight-next-line
+          !isTimeup && onTimeup()
+          // highlight-next-line
+          setIsTimeup(true)
+          clearInterval(tid)
+          return prevCounter
+        }
+      })
+    }, delay)
+  }
+
+  return () => clearInterval(tid)
+}, [isTiming, delay])
+```
+
+## 总结
+
+至此，一个计时器组件完成。该组件可用于申请验证码后，显示再次申请验证码时所需要的时间；或是用函数子组件，将 counter 的值进行二次计算，在显示会自动消失的通知栏上给用户反馈通知栏消失前的剩余时间。

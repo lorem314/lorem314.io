@@ -3,8 +3,12 @@ import styled, { css } from "styled-components"
 export const Blockquote = styled.blockquote`
   margin: 1rem 0;
   border-left: 0.25rem solid currentColor;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
   padding-left: 0.75rem;
+
+  > p {
+    margin: 0;
+  }
 `
 
 const cssList = css`

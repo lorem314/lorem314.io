@@ -28,6 +28,7 @@ const GlobalStyle = styled.createGlobalStyle`
   :root {
     --header-height: ${size.headerHeight}px;
     --svg-icon-size: 16px;
+    --ui-default-line-height: 1.25;
 
     --layout-left-drawer-width: ${size.layoutLeftDrawerWidth}px;
     --theme-transition-props: 0.25s ease-in-out;
@@ -40,9 +41,13 @@ const GlobalStyle = styled.createGlobalStyle`
   }
   html {
     font-size: 16px;
+    overflow-x: hidden;
   }
   body {
     margin: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
     // Prevent both vertical and horizontal from overflow caused by the
     // transform attribute of any descendant elements in the body.
     overflow: hidden;
@@ -51,9 +56,10 @@ const GlobalStyle = styled.createGlobalStyle`
       --header-bg: #2c5c97;
       --link-color: #d23669;
 
-      --page-content-text-color-0: #242424; // heading
-      --page-content-text-color-1: #4b5563; // normal text, p
-      --page-content-text-color-2: ; // blockquote
+      --content-text-color-0: #344f71; // heading
+      --content-text-color-1: #4b5563; // normal text, p
+      --content-text-color-2: ; // blockquote
+      --page-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
       --page-content-bg: #fdfdfd;
       --content-bg-0: #e5e5e5;
       --content-bg-1: #f7f7f7;
@@ -82,6 +88,9 @@ const GlobalStyle = styled.createGlobalStyle`
       --ui-tooltip-color: #f7f7f7;
       --ui-tooltip-bg: rgba(0, 0, 0, 0.8);
 
+      --ui-oreilly-table-thead-color: #fff;
+      --ui-oreilly-table-thead-bg: #000;
+
       --ui-godot-tip-title-color: #fff;
       --ui-godot-tip-title-bg: #1abc9c;
       --ui-godot-tip-content-color: #404040;
@@ -101,9 +110,10 @@ const GlobalStyle = styled.createGlobalStyle`
       --header-bg: #1a2c42;
       --link-color: #ffa7c4;
 
-      --page-content-text-color-0: white;
-      --page-content-text-color-1: #e5e7eb;
-      --page-content-text-color-2: ;
+      --content-text-color-0: #fff;
+      --content-text-color-1: #cbcbcb;
+      --content-text-color-2: ;
+      --page-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
       --page-content-bg: #232323;
       --content-bg-0: #191919;
       --content-bg-1: #1e1e1e;
@@ -112,10 +122,10 @@ const GlobalStyle = styled.createGlobalStyle`
       --inline-code-bg: #22252d;
 
       // godot-ish color style
-      --page-content-text-color-1: rgba(255, 255, 255, 0.85); // ------
-      --page-content-bg: #2e3236; // -------------
-      --content-bg-0: #202326; // -----
-      --content-bg-1: #25282b; // ----
+      /* --content-text-color-1: rgba(255, 255, 255, 0.85); */
+      /* --page-content-bg: #2e3236; */
+      /* --content-bg-0: #202326; */
+      /* --content-bg-1: #25282b; */
       // godot-ish
 
       --ui-default-bg-hover: rgba(255, 255, 255, 0.1);
@@ -139,6 +149,9 @@ const GlobalStyle = styled.createGlobalStyle`
 
       --ui-tooltip-color: #181818;
       --ui-tooltip-bg: hsla(0, 0%, 78%, 0.9);
+
+      --ui-oreilly-table-thead-color: #000;
+      --ui-oreilly-table-thead-bg: #fff;
 
       --ui-godot-tip-title-color: #dfd;
       --ui-godot-tip-title-bg: #336648;
@@ -170,7 +183,7 @@ const GlobalStyle = styled.createGlobalStyle`
   }
   button {
     cursor: pointer;
-    line-height: 1.2;
+    line-height: var(--ui-default-line-height);
     font-size: 1em;
     padding: 0.25em 0.5em;
 
@@ -188,32 +201,30 @@ const GlobalStyle = styled.createGlobalStyle`
       padding: 0;
     }
   }
-  /* details {
+  details {
     > summary {
+      cursor: pointer;
+      padding: 0.125em 0;
+
       display: flex;
       align-items: center;
 
-      padding: 0.125rem;
-      cursor: pointer;
-      list-style: none;
-
-      &::marker,
-      &::-webkit-details-marker {
-        display: none;
-      }
+      user-select: none;
     }
-  } */
+  }
   input {
-    line-height: 1.2;
+    line-height: var(--ui-default-line-height);
     font-size: 1em;
     padding: 0.35rem;
+    margin: 0;
 
     &[type="text"],
     &[type="search"] {
-      outline-offset: -2px;
       width: 100%;
       border-radius: 0.25em;
-      color: var(--ui-input-color);
+      outline-offset: -2px;
+
+      color: var(--content-text-color-1);
       border: 2px solid var(--ui-default-border-color);
       background-color: var(--ui-input-bg);
       ${transition("color", "bg", "bdc")}
@@ -221,6 +232,11 @@ const GlobalStyle = styled.createGlobalStyle`
       &:focus {
         outline: 2px solid var(--ui-default-outline-color-focus);
       }
+    }
+    &[type="checkbox"] {
+      width: 1rem;
+      height: 1rem;
+      margin: 0.25rem;
     }
   }
   kbd {
@@ -249,27 +265,49 @@ const GlobalStyle = styled.createGlobalStyle`
     cursor: pointer;
     user-select: none;
   }
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  textarea {
+    margin: 0.5rem 0;
+    padding: 0.35rem;
+    width: 100%;
+    font-size: 1em;
+    border-radius: 0.25em;
+    color: var(--ui-input-color);
+    border: 2px solid var(--ui-default-border-color);
+    background-color: var(--ui-input-bg);
+    ${transition("color", "bg", "bdc")}
+  }
 
   /* custom className */
+  .block {
+    display: block;
+  }
+  .flex-center {
+    display: flex;
+    align-items: center;
+  }
   .page-content {
-    /* margin: 2rem auto; */
     border: 1px solid transparent;
     padding: 0.5rem 1rem;
-    color: var(--page-content-text-color-1);
+
+    box-shadow: var(--page-shadow);
+    color: var(--content-text-color-1);
     background-color: var(--page-content-bg);
     ${transition("color", "bg")}
   }
   .page-content-title {
-    user-select: none;
-    margin: 0 0 0.5em;
-    padding-bottom: 0.25em;
+    margin: 0 0 0.5rem;
     border-bottom: 1px solid var(--ui-default-border-color);
-    display: flex;
+    padding: 0 0 0.25rem;
+    /* display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 1em;
+    align-items: center; */
     font-weight: bolder;
-    color: var(--page-content-text-color-0);
+    font-size: 0.925rem;
+    color: var(--content-text-color-0);
     ${transition("color")}
   }
 `

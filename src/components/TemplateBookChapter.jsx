@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import Actions from "./article/Actions"
@@ -12,6 +12,7 @@ import FixedButton from "../styled/FixedButton"
 
 import TableOfContentsIcon from "../svg/TableOfContentsIcon"
 import { bp } from "../styled/GlobalStyle"
+import debounce from "../utils/debounce"
 
 const Wrapper = styled.div`
   margin: 2rem auto;
@@ -43,6 +44,28 @@ const Wrapper = styled.div`
 const TemplateBookChapter = ({ bookChapter, bookChapters, location }) => {
   const { body, tableOfContents, frontmatter } = bookChapter
   const { isbn, title, chapter } = bookChapter.frontmatter
+  const { pathname } = location
+
+  useEffect(() => {
+    const mainContent = document.getElementById("main-content")
+    const key = `lorem314.io_bookChapter_${isbn}$${chapter}`
+
+    const top = JSON.parse(localStorage.getItem(key))?.scrollTop
+    top && mainContent.scrollTo({ top, left: 0, behavior: "instant" })
+
+    const debouncedHandleScroll = debounce(() => {
+      const scrollTop = mainContent.scrollTop
+      localStorage.setItem(
+        key,
+        JSON.stringify({ isbn, scrollTop, title, pathname })
+      )
+    })
+
+    mainContent.addEventListener("scroll", debouncedHandleScroll)
+    return () => {
+      mainContent.removeEventListener("scroll", debouncedHandleScroll)
+    }
+  }, [])
 
   return (
     <Wrapper>

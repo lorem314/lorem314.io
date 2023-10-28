@@ -14,6 +14,7 @@ import TagIcon from "../svg/TagIcon"
 import useDebounce from "../hooks/useDebounce"
 import { collectTags } from "../utils/formatter"
 import { bp } from "../styled/GlobalStyle"
+import { transition } from "../utils/css"
 
 const Wrapper = styled.div`
   max-width: 72rem;
@@ -35,10 +36,11 @@ const Wrapper = styled.div`
   }
   .tags-container {
   }
-  > section[class$="container"] {
+  /* > section[class$="container"] {
     padding: 10px;
     background-color: var(--page-content-bg);
-  }
+    ${transition("bg")}
+  } */
 
   @media screen and (max-width: ${bp.collapsePageBlogRightDrawer}px) {
     > .form-container {
@@ -56,7 +58,7 @@ const PageBlog = ({ allBlogPost = [] }) => {
   const [posts, setPosts] = useState(allBlogPost)
   const [selectedTags, setSelectedTags] = useState([])
   const [isOrLogic, setIsOrLogic] = useState(true)
-  // tags = [{ name, count }, { name, count }, ...]
+  // tags : { name: String, count: Number }[]
   const tags = useMemo(() => collectTags(allBlogPost), [allBlogPost])
   const [searchTerm, setSearchTerm] = useState("")
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
@@ -109,7 +111,7 @@ const PageBlog = ({ allBlogPost = [] }) => {
 
   return (
     <Wrapper>
-      <section className="form-container">
+      <section className="page-content form-container">
         <Search value={searchTerm} onChange={handleChangeSearchTerm} />
         <Select
           selectedTags={selectedTags}
@@ -121,8 +123,10 @@ const PageBlog = ({ allBlogPost = [] }) => {
         />
       </section>
 
-      <section className="posts-container">
-        <div className="page-content-title">博客 ({posts.length})</div>
+      <section className="page-content posts-container">
+        <div className="page-content-title">
+          博客 ({posts.length}/{allBlogPost.length})
+        </div>
         <PostList posts={posts} />
       </section>
 
@@ -139,7 +143,7 @@ const PageBlog = ({ allBlogPost = [] }) => {
             />
           </InDrawer>
         </Drawer>
-        <section className="tags-container">
+        <section className="page-content tags-container">
           <div className="page-content-title">所有标签 ({tags.length})</div>
           <AllTag
             tags={tags}

@@ -1,11 +1,11 @@
 import React from "react"
+import { Helmet } from "react-helmet"
 import { Link } from "gatsby"
 import styled from "styled-components"
 
 import Layout from "../../layouts/Layout"
-import PageContent from "../../styled/PageContent"
 
-const Wrapper = styled(PageContent)`
+const Wrapper = styled.section`
   margin: 2rem auto;
   max-width: 32rem;
 `
@@ -13,7 +13,8 @@ const Wrapper = styled(PageContent)`
 const Tool = () => {
   return (
     <Layout>
-      <Wrapper>
+      <Helmet title="工具 | Lorem314's Blog" />
+      <Wrapper className="page-content">
         <h2 className="page-content-title">工具</h2>
         <ul>
           <li>

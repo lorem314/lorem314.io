@@ -56,7 +56,7 @@ const Wrapper = styled.div`
       > button {
         --svg-icon-size: 18px;
         opacity: 0.5;
-        color: var(--page-content-text-color-1);
+        color: var(--content-text-color-1);
         ${transition("color")}
         font-family: monospace;
         &:hover {
@@ -78,7 +78,7 @@ const Wrapper = styled.div`
     margin: 0;
     padding: 0;
     box-sizing: content-box;
-    display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
     border-radius: 0.25em;
     border: 2px solid var(--ui-default-border-color);
     width: 100%;
@@ -134,13 +134,15 @@ const Select = ({
       document.removeEventListener("click", handleClick)
     }
   }, [])
-  // horizontally scroll for .selected-tags
+  // horizontally scroll on .selected-tags
   useEffect(() => {
     const nodeSelectedTags = refSelectedTags.current
     const handleWheel = (event) => {
+      event.stopPropagation()
+      event.preventDefault()
       nodeSelectedTags.scrollBy({ left: event.deltaY < 0 ? -30 : 30 })
     }
-    nodeSelectedTags?.addEventListener("wheel", handleWheel, { passive: true })
+    nodeSelectedTags?.addEventListener("wheel", handleWheel)
     return () => {
       nodeSelectedTags?.removeEventListener("wheel", handleWheel)
     }
@@ -256,26 +258,24 @@ const Select = ({
   })
 
   return (
-    <Wrapper $isOpen={isOpen}>
-      <label className="page-content-title" htmlFor="blog-select-input">
-        筛选标签
+    <Wrapper isOpen={isOpen}>
+      <label className="page-content-title block" htmlFor="blog-select-input">
+        <span>筛选标签</span>
       </label>
 
       <div className="select-input-group">
-        {selectedTags.length === 0 ? null : (
-          <div className="selected-tags" ref={refSelectedTags}>
-            {selectedTags.map((selectedTag) => {
-              return (
-                <button
-                  key={selectedTag.name}
-                  onClick={handleSelectTag(selectedTag)}
-                >
-                  {selectedTag.name}
-                </button>
-              )
-            })}
-          </div>
-        )}
+        <div className="selected-tags" ref={refSelectedTags}>
+          {selectedTags.map((selectedTag) => {
+            return (
+              <button
+                key={selectedTag.name}
+                onClick={handleSelectTag(selectedTag)}
+              >
+                {selectedTag.name}
+              </button>
+            )
+          })}
+        </div>
 
         {selectedTags.length === 0 ? null : <div className="divider" />}
         <input

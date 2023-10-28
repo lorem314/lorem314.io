@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import Actions from "./article/Actions"
@@ -12,6 +12,7 @@ import FixedButton from "../styled/FixedButton"
 
 import TableOfContentsIcon from "../svg/TableOfContentsIcon"
 import { bp } from "../styled/GlobalStyle"
+import debounce from "../utils/debounce"
 
 const Wrapper = styled.div`
   margin: 2rem auto;
@@ -41,9 +42,30 @@ const Wrapper = styled.div`
 `
 
 const TemplateBlogPost = ({ blogPost, location }) => {
+  const { pathname } = location
   const { body, frontmatter, tableOfContents } = blogPost
+  const { id, title } = frontmatter
 
-  console.log("blogPost :", blogPost)
+  useEffect(() => {
+    const key = `lorem314.io_blogPost_${blogPost.frontmatter.id}`
+    const mainContent = document.getElementById("main-content")
+    const top = JSON.parse(localStorage.getItem(key))?.scrollTop
+    top && mainContent.scrollTo({ top, left: 0, behavior: "instant" })
+
+    const debouncedHandleScroll = debounce(() => {
+      const scrollTop = mainContent.scrollTop
+      localStorage.setItem(
+        key,
+        JSON.stringify({ id, scrollTop, title, pathname })
+      )
+    })
+
+    mainContent.addEventListener("scroll", debouncedHandleScroll)
+    return () => {
+      mainContent.removeEventListener("scroll", debouncedHandleScroll)
+    }
+  }, [id])
+
   return (
     <Wrapper>
       <Actions location={location} />

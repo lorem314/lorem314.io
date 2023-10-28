@@ -4,12 +4,12 @@ import styled from "styled-components"
 
 import Logo from "./Logo"
 import Tooltip from "../ui/Tooltip"
+import LatestArticles from "../components/index/LatestArticles"
 
 import CloseIcon from "../svg/CloseIcon"
 import HomeIcon from "../svg/HomeIcon"
 import ArticleIcon from "../svg/ArticleIcon"
 import BookIcon from "../svg/BookIcon"
-import CodeIcon from "../svg/CodeIcon"
 import ComponentsIcon from "../svg/ComponentsIcon"
 import SettingIcon from "../svg/SettingIcon"
 
@@ -22,7 +22,7 @@ const Wrapper = styled.aside`
   bottom: 0;
   width: var(--layout-left-drawer-width);
 
-  color: var(--page-content-text-color-1);
+  color: var(--content-text-color-1);
   background-color: var(--content-bg-1);
   ${transition("color", "bg")}
 
@@ -99,7 +99,6 @@ const Wrapper = styled.aside`
   }
 
   > .footer {
-    padding: 10px 1rem;
   }
 `
 
@@ -138,7 +137,8 @@ const LeftSidebar = ({
           })}
         </nav>
 
-        <section className="latest-articles page-content">
+        <LatestArticles className="page-content" />
+        {/* <section className="latest-articles page-content">
           <h3 className="page-content-title">博客</h3>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
           <p>
@@ -234,12 +234,10 @@ const LeftSidebar = ({
             repellendus labore delectus!
           </p>
           <p>Neque magnam ratione magni aliquam nisi repellat?</p>
-        </section>
+        </section> */}
       </div>
 
-      <footer className="footer">
-        <div>footer</div>
-      </footer>
+      <footer className="footer"></footer>
     </Wrapper>
   )
 }

@@ -14,11 +14,11 @@ const Wrapper = styled.header`
 
   > .post-title {
     margin: 1rem 0;
-    color: var(--page-content-text-color-0);
+    color: var(--content-text-color-0);
   }
 
   > .tags-container {
-    font-size: smaller;
+    /* font-size: smaller; */
   }
 `
 

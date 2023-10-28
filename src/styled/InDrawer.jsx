@@ -38,6 +38,7 @@ const Wrapper = styled.aside`
   > .children {
     flex: 1 1 auto;
     background-color: var(--page-content-bg);
+    padding: 10px;
   }
 `
 

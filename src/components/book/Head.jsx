@@ -14,7 +14,7 @@ const Wrapper = styled.header`
   > .post-frontmatter {
     text-align: right;
     margin: 1rem 0;
-    color: var(--page-content-text-color-0);
+    color: var(--content-text-color-0);
     ${transition("color")}
 
     > .chapter {
@@ -26,7 +26,7 @@ const Wrapper = styled.header`
   }
 
   > .tags-container {
-    font-size: smaller;
+    /* font-size: smaller; */
   }
 `
 

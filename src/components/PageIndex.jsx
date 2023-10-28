@@ -1,51 +1,34 @@
 import React from "react"
 import styled from "styled-components"
 
-import PageContent from "../styled/PageContent"
+import SteamPowerIcon from "../svg/SteamPowerIcon"
+import LatestArticles from "./index/LatestArticles"
 
-import Details from "../html/Details"
-// import { Tip, Note, Warning } from "../html/godot"
-import { Tip, Note, Warning } from "../html/oreilly"
-
-const Wrapper = styled(PageContent)`
+const Wrapper = styled.section`
   margin: 2rem auto;
   max-width: 48rem;
-
-  .test-area {
-    margin: 0 2rem;
-  }
 `
 
 const PageIndex = () => {
   return (
-    <Wrapper>
+    <Wrapper className="page-content">
       <h2 className="page-content-title">主页</h2>
-
-      <div className="test-area">
-        <Tip>
-          楼上的金佛安，慰剂佛i啊机构i啊感，觉哦啊安慰简欧风格i，骄傲如果，i骄傲俄日感觉，傲然平均分高，IP文件给，排热机关，炮。
-          楼上的金佛安，慰剂佛i啊机构i啊感，觉哦啊安慰简欧风格i，骄傲如果，i骄傲俄日感觉，傲然平均分高，IP文件给，排热机关，炮。
-          楼上的金佛安，慰剂佛i啊机构i啊感，觉哦啊安慰简欧风格i，骄傲如果，i骄傲俄日感觉，傲然平均分高，IP文件给，排热机关，炮。
-          楼上的金佛安，慰剂佛i啊机构i啊感，觉哦啊安慰简欧风格i，骄傲如果，i骄傲俄日感觉，傲然平均分高，IP文件给，排热机关，炮。
-          楼上的金佛安，慰剂佛i啊机构i啊感，觉哦啊安慰简欧风格i，骄傲如果，i骄傲俄日感觉，傲然平均分高，IP文件给，排热机关，炮。
-          楼上的金佛安，慰剂佛i啊机构i啊感，觉哦啊安慰简欧风格i，骄傲如果，i骄傲俄日感觉，傲然平均分高，IP文件给，排热机关，炮。
-        </Tip>
-        <Note>这里的内容需要熟记于心。</Note>
-        <Warning>值得注意的点。</Warning>
-        <Tip>这是一个提示，用于提示。</Tip>
-        <Note>这里的内容需要熟记于心。</Note>
-        <Warning>值得注意的点。</Warning>
-
-        <Details>
-          <strong>标题</strong>
-          <div>
-            <ul>
-              <li>1</li>
-              <li>2</li>
-            </ul>
-          </div>
-        </Details>
-      </div>
+      <p>欢迎来到我的博客</p>
+      <p>有些地方仍处于开发状态，你可以从左侧的导航栏找想去的地方...</p>
+      <LatestArticles />
+      <section>
+        <h3 className="page-content-title">足迹（你也可以在以下地方找到我）</h3>
+        <div className="flex-center" style={{ gap: "10px" }}>
+          <SteamPowerIcon size="2rem" />
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://steamcommunity.com/profiles/76561198174551770/"
+          >
+            Number_DDD
+          </a>
+        </div>
+      </section>
     </Wrapper>
   )
 }

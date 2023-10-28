@@ -22,9 +22,9 @@ NodeJS 是一个可以使 JavaScript 代码运行在服务器上的<u>自包含<
 
 本章中还会有一些作为例子用于讲解的小型服务器应用，在之后的章节中我们会多次对其进行改进和升级。最原始的应用程序的代码非常简单，可能要比你以前见过的任何代码都要简单。
 
-如果你早已对 NodeJS 有过一些了解，可以直接跳转至<a href="#应用程序示例">1.4 应用程序示例</a>。
+如果你早已对 NodeJS 有过一些了解，可以直接跳转至 <a href="#应用程序示例">1.4 应用程序示例</a>。
 
-JavaScript 语言正在从**单线程**语言转为**多线程**语言。例如 `Atomics` 对象，提供了与不同**线程**(thread)通信的机制，而 `SharedArrayBuffer` 可被跨线程地读取和存储。在撰写本书的时间节点上，多线程 JavaScript 还未迎合大众，在社区中流行开来。如今的 JavaScript 已经是多线程，但该语言的核心以及生态，仍被认为是单线程。
+JavaScript 语言正在从**单线程**语言转为**多线程**语言。例如 <a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Atomics">Atomics</a> 对象，提供了与不同**线程**(thread)通信的机制，而 <a target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer">SharedArrayBuffer</a> 可被跨线程地读取和存储。在撰写本书的时间节点上，多线程 JavaScript 还未迎合大众，在社区中流行开来。如今的 JavaScript 已经是多线程，但该语言的核心以及生态，仍被认为是单线程。
 
 ## JavaScript 的单线程特性
 
@@ -37,9 +37,9 @@ JavaScript 语言正在从**单线程**语言转为**多线程**语言。例如 
 
 然而，JavaScript 语言也不同于其他编程语言的是，它不会将自身的代码限制在一个调用栈中，相比于 PHP，整个 PHP 脚本的生命周期都只存在于一个调用栈中，随着接受到 HTTP 请求后开始增长和收缩，最后消失。其生命周期直接与服务 HTTP 请求所需的时间相关。
 
-JavaScript 通过**事件循环**(event loop)的方式来处理并行任务。本章的<a href="#NodeJS-中的事件循环">1.3 NodeJS 中的事件循环</a>一节中会更详细地介绍有关事件循环的机制，至于现在，我们可以将其抽象为一个**不断检查是否有未完成的任务要去完成的**死循环。当检查到有需要完成的任务时，它便开始去执行任务——这里之的任务通常是一个函数，并且是在一个新的调用栈中执行该函数。完成任务后，事件循环又会回到不断检查的状态，直到再次检查到有任务要完成。
+JavaScript 通过**事件循环**(event loop)的方式来处理并行任务。本章的 <a href="#NodeJS-中的事件循环">1.3 NodeJS 中的事件循环</a>一节中会更详细地介绍有关事件循环的机制，至于现在，我们可以将其抽象为一个**不断检查是否有未完成的任务要去完成的**死循环。当检查到有需要完成的任务时，它便开始去执行任务——这里之的任务通常是一个函数，并且是在一个新的调用栈中执行该函数。完成任务后，事件循环又会回到不断检查的状态，直到再次检查到有任务要完成。
 
-我们通过示例代码 1-1 来具体说明一下事件循环的过程。首先执行 setTimeout 函数，将 `x()` 函数的运行放到宏队列中，之后在当前栈中执行函数 `a()` 。执行完函数 a 后，当前栈中的任务均已被执行，事件循环便开始检查是否有未完成的任务，事件循环只有在一个栈中的所有任务都执行完毕后，才会去检查其他的栈。接下来开始执行被放到宏队列中的 x 函数。
+我们通过<a href="#code_1-1">代码 1-1</a> 来具体说明一下事件循环的过程。首先执行 setTimeout 函数，将 `x()` 函数的运行放到宏队列中，之后在当前栈中执行函数 `a()` 。执行完函数 a 后，当前栈中的任务均已被执行，事件循环便开始检查是否有未完成的任务，事件循环只有在一个栈中的所有任务都执行完毕后，才会去检查其他的栈。接下来开始执行被放到宏队列中的 x 函数。
 
 ```js id=1-1 title=多个JavaScript堆栈示例
 function a() {
@@ -80,11 +80,9 @@ a()
 
 <BorderBox title="面试问题">
 
-下面这个问题我常出给来面试的人，示例代码 1-2 会输出什么结果。另外，它们大概会在第几毫秒时输出。
+下面这个问题我常出给来面试的人，<a href="#code_1-2">代码 1-2</a> 会输出什么结果。另外，它们大概会在第几毫秒时输出。
 
-<div class="custom-code-title">示例代码 1-2 JavaScript 计时问题</div>
-
-```js
+```js id=1-2 title=JavaScript计时问题
 setTimeout(() => console.log("A"), 0)
 console.log("B")
 
@@ -140,11 +138,9 @@ console.log("E")
 
 在简单聊了一下 JavaScript 后，现在再来说一说 NodeJS 本身。
 
-下面的表格 1-1 提供了之前面试问题的答案。
+下面的<a href="#table_1-1">表格 1-1</a> 提供了之前面试问题的答案。
 
-<div class="custom-code-title">表格 1-1 面试问题的答案和分析</div>
-
-```table
+```table type=table id=1-1 title=面试问题的答案和分析
 ┌───────┬────────┬────────┬────────┬────────┬────────┐
 │  Log  │   B    │   E    │   A    │   D    │   C    │
 ├───────┼────────┼────────┼────────┼────────┼────────┤
@@ -174,17 +170,15 @@ NodeJS 通过回调，使其的内部模块完全符合**延续传递方式**(Co
 
 这也正是其有趣之处。NodeJS 本身是**多线程**的，其底层由 C++ 语言实现，其中包含了第三方工具如 libuv，它主要处理操作系统抽象和读写操作，和 v8(JavaScript 引擎) 及其他第三方模块。再上一层，NodeJS 捆绑层，也存在一些 C++代码。只有 NodeJS 的最高层，是用 JavaScript 语言编写的，如 NodeJS 的部分 API 和 由其他用户编写并维护的 npm 模块的代码。<a href="#figure_1-3">图示 1-3</a> 展示了不同层级间的关系。
 
-<Figure id="figure_1-3" title="图示 1-3 NodeJS的层级">
+<Figure id="figure_1-3" title="图示 1-3 NodeJS 的层级">
 
 ![图示 1-3 NodeJS 的层级](./figure_1-3.png)
 
 </Figure>
 
-在内部，libuv 维护一个线程池来管理 I/O 操作，以及像 crypto 和 zlib 这样的 CPU 密集型操作。这是一个有限大小的池，允许发生 I/O 操作。如果池只包含四个线程，则只能同时读取四个文件。代码示例 1-3 中，应用程序尝试读取文件，执行一些其他工作，然后处理文件内容。尽管应用程序中的 JavaScript 代码能够运行，但 Node.js 内部的一个线程正忙于将文件的内容从磁盘读取到内存中。
+在内部，libuv 维护一个线程池来管理 I/O 操作，以及像 crypto 和 zlib 这样的 CPU 密集型操作。这是一个有限大小的池，允许发生 I/O 操作。如果池只包含四个线程，则只能同时读取四个文件。<a href="#code_1-3">代码 1-3</a> 中，应用程序尝试读取文件，执行一些其他工作，然后处理文件内容。尽管应用程序中的 JavaScript 代码能够运行，但 Node.js 内部的一个线程正忙于将文件的内容从磁盘读取到内存中。
 
-<div class="custom-code-title">示例 1-3 Nodejs 线程</div>
-
-```js title=NodeJS线程 array=['32','str'] id=1-3
+```js id=1-3 title=NodeJS线程
 const fs = require("fs")
 
 fs.readFile(
@@ -211,11 +205,9 @@ setImmediate(
 4. 文件读取完成后，libuv 将结果传递给 V8 事件循环。
 
 <Note>
-  libuv 线程池大小默认为 4，最大为 1,024，并且可以通过设置
-  UV_THREADPOOL_SIZE=[threads]
-  环境变量来覆盖。在平时实践中很少会对其进行修改，只有在进行过基准测试的最终生产环境中才会对其进行修改。在
-  macOS 笔记本电脑上本地运行的应用程序的行为与在 Linux
-  服务器上的容器中运行的应用程序非常不同。
+
+libuv 线程池大小默认为 4，最大为 1,024，并且可以通过设置 UV_THREADPOOL_SIZE=[threads] 环境变量来覆盖。在平时实践中很少会对其进行修改，只有在进行过基准测试的最终生产环境中才会对其进行修改。在 macOS 笔记本电脑上本地运行的应用程序的行为与在 Linux 服务器上的容器中运行的应用程序非常不同。
+
 </Note>
 
 在内部，NodeJS 维护了一个待完成的异步任务列表。此列表用于保持进程运行。当堆栈完成并且事件循环寻找更多工作要做时，如果没有更多操作可以让进程保持活动状态，它将退出。这就是为什么一个不做任何异步操作的非常简单的应用程序能够在堆栈结束时退出的原因。例如下面的代码例子:
@@ -234,11 +226,9 @@ setInterval(() => {
 
 有许多 NodeJS API 调用会导致创建使进程保持活跃状态。例如，当一个 HTTP 服务器被创建后，它将永远保持该进程运行。一个创建后马上就关闭的服务器一般不会应用到实际当中。
 
-NodeJS API 中有一个常见模式，可以将此类对象配置为不再使进程保持活动状态。其中一些比其他更明显。例如，如果一个监听 HTTP 服务器端口被关闭，那么进程可能会选择结束。此外，其中许多对象都附加了一对方法，`unref()` 和 `ref()`。前者用于告诉对象不再保持进程处于活动状态，后者则相反。代码示例 1-4 演示了这种情况。
+NodeJS API 中有一个常见模式，可以将此类对象配置为不再使进程保持活动状态。其中一些比其他更明显。例如，如果一个监听 HTTP 服务器端口被关闭，那么进程可能会选择结束。此外，其中许多对象都附加了一对方法，`unref()` 和 `ref()`。前者用于告诉对象不再保持进程处于活动状态，后者则相反。<a href="#code_1-4">代码 1-4</a> 演示了这种情况。
 
-<div class="custom-code-title">代码示例 1-4 常见的ref()和unref()方法</div>
-
-```js
+```js id=1-4 title=ref和unref方法
 const t1 = setTimeout(() => {}, 1_000_000) // 1
 const t2 = setTimeout(() => {}, 2_000_000) // 2
 // ...
@@ -258,7 +248,7 @@ clearTimeout(t2) // 4
 
 ## NodeJS 中的事件循环
 
-无论是运行在浏览器环境下的 JavaScript 还是 Node 环境下的 JavaScript，都有事件循环机制。相同之处在于，它们都被用于在不同的调用栈中处理异步任务地调度和执行；不同之处在于，浏览器中地事件循环经过优化，更好地驱动单页面应用程序，NodeJS 中的事件循环能够更好地在服务器上运行。该小节讲解 Node.js 中的事件循环。理解事件循环的基础不仅能更好的让我们了解应用程序中代码的执行先后，也可以避免将 bug 引入应用程序。
+无论是运行在浏览器环境下的 JavaScript 还是 Node 环境下的 JavaScript，都有事件循环机制。相同之处在于，它们都被用于在不同的调用栈中处理异步任务地调度和执行；不同之处在于，浏览器中地事件循环经过优化，更好地驱动单页面应用程序，NodeJS 中的事件循环能够更好地在服务器上运行。该小节讲解 NodeJS 中的事件循环。理解事件循环的基础不仅能更好的让我们了解应用程序中代码的执行先后，也可以避免将 bug 引入应用程序。
 
 顾名思义，事件循环是一个循环。它管理事件队列，该队列又触发回调函数。但是，正如你所料，实现过程远比这微妙得多。当 IO 事件发生时，回调执行，像是套接字接收到消息，修改磁盘中的文件，setTimeout 回调执行等。
 
@@ -311,9 +301,7 @@ clearTimeout(t2) // 4
 
 理论虽好，实践才是关键。下面的例子涉及到了 poll，check 和 timers 三个阶段。
 
-<div class="custom-code-title">event-loop-phases.js</div>
-
-```js
+```js title=event-loop-phases.js
 const fs = require("fs")
 
 setImmediate(() => console.log(1))
@@ -496,15 +484,13 @@ npm init -y
 
 ### 生产者服务器
 
-现在设置已经完成，是时候查看源代码了。 示例 1-6 是一个内部 Recipe API 服务，一个提供数据的上游服务。 对于此示例，它将仅提供静态数据。 现实世界的应用程序可能会从数据库中检索数据。
+现在设置已经完成，是时候查看源代码了。 <a href="#code_1-6">代码 1-6</a> 是一个内部 Recipe API 服务，一个提供数据的上游服务。 对于此示例，它将仅提供静态数据。 现实世界的应用程序可能会从数据库中检索数据。
 
 ```shell
 npm install fastify@3.2
 ```
 
-<div class="custom-code-title">示例 1-6 recipe-api/producer-http-basic.js</div>
-
-```js
+```js id=1-6 title=recipe-api/producer-http-basic.js
 const server = require("fastify")()
 const HOST = process.env.HOST || "127.0.0.1"
 const PORT = process.env.PORT || 4000
@@ -538,7 +524,7 @@ server.listen(PORT, HOST, () => {
 })
 ```
 
-<GreenSquirrel>
+<Tip>
 
 ```
 #!/usr/bin/env node
@@ -546,7 +532,7 @@ server.listen(PORT, HOST, () => {
 
 文件的第一行，以#开头的内容，叫做 shebang，或 hashbang。其由当年创造 Unix 的人设计，用于指定脚本的解释器。当一个文件的首行为 shebang，且为可运行文件时（通过 chmod +x filename.js 完成），我们可以直接通过 `./filename.js`来执行文件，而不必再加上 node 命令，比如 node filename.js。
 
-</GreenSquirrel>
+</Tip>
 
 此服务准备就绪后，您可以在两个不同的终端窗口中使用它。 执行以下命令； 第一个启动 recipe-api 服务，第二个测试它正在运行并可以返回数据：
 
@@ -576,7 +562,7 @@ curl http://127.0.0.1:4000/recipes/42  # 控制台 2
 
 ### 消费者服务器
 
-第二个服务是面向公众的 Web API 服务，它不包含那么多数据，但更复杂，因为它会发出一个出站请求。 将示例 1-7 中的源代码复制到位于 web-api/consumer-http-basic.js 的文件中。
+第二个服务是面向公众的 Web API 服务，它不包含那么多数据，但更复杂，因为它会发出一个出站请求。 将<a href="#code_1-7">代码 1-7</a> 中的源代码复制到位于 web-api/consumer-http-basic.js 的文件中。
 
 ```shell
 npm install node-fetch@2.6
@@ -584,9 +570,7 @@ npm install node-fetch@2.6
 
 该依赖提供了 fetch 方法，能使我们在服务端向网页中那样使用 fetch 方法请求网络资源。
 
-<div class="custom-code-title">示例 1-7 web-api/consumer-http-basic.js</div>
-
-```js
+```js id=1-7 title=web-api/consumer-http-basic.js
 const server = require("fastify")()
 const fetch = require("node-fetch")
 

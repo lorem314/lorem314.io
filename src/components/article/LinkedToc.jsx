@@ -2,7 +2,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useRef,
-  useState,
+  useEffect,
   createRef,
 } from "react"
 import styled, { css } from "styled-components"
@@ -72,6 +72,13 @@ const Wrapper = styled.aside.attrs({
       }
     }
   }
+  a {
+    opacity: 0.9;
+  }
+  a.is-active {
+    font-weight: bolder;
+    opacity: 1;
+  }
 `
 
 const cssDetailsHeader = css`
@@ -91,7 +98,7 @@ const cssDetailsHeader = css`
   &:hover {
     > button {
       opacity: 0.5;
-      color: var(--page-content-text-color-1);
+      color: var(--content-text-color-1);
 
       &:hover {
         opacity: 1;
@@ -107,6 +114,8 @@ const DetailsHeaderInLinkedToc = styled.div`
 const LinkedToc = ({ tableOfContents }) => {
   const refDetails = useRef(null)
   const refItems = useRef(null)
+
+  useEffect(tocHighlightEffect, [tableOfContents])
 
   const handleExpandAll = (event) => {
     event?.stopPropagation()
@@ -179,6 +188,8 @@ const DetailsHeaderInList = styled.li`
 `
 
 const Item = forwardRef(({ item, level = 0 }, ref) => {
+  const href = `#${convertTitleToHeadingId(item.title)}`
+
   const refDetails = useRef(null)
   const refItems = useRef(null)
 
@@ -208,13 +219,21 @@ const Item = forwardRef(({ item, level = 0 }, ref) => {
   )
 
   if (!item.items) {
-    return <a href="">{item.title}</a>
+    return (
+      <a data-id={convertTitleToDataId(item.title)} href={href}>
+        {item.title}
+      </a>
+    )
   } else {
     return (
       <Details open ref={refDetails}>
         <DetailsHeaderInList>
           <div className="details-title">
-            <a href="/" onClick={justStopPropagation}>
+            <a
+              data-id={convertTitleToDataId(item.title)}
+              href={href}
+              onClick={justStopPropagation}
+            >
               {item.title}
             </a>
           </div>
@@ -230,3 +249,137 @@ const Item = forwardRef(({ item, level = 0 }, ref) => {
     )
   }
 })
+
+function tocHighlightEffect() {
+  const Toc = {
+    container: document.getElementById("linked-toc"),
+    links: null,
+    headings: null,
+    intersectionOptions: {
+      rootMargin: "0px",
+      threshold: 1,
+    },
+    previousSection: null,
+    observer: null,
+
+    init() {
+      this.handleObserver = this.handleObserver.bind(this)
+      this.setUpObserver()
+      this.findLinksAndHeadings()
+      this.observeSections()
+    },
+    handleObserver(entries, observer) {
+      entries.forEach((entry) => {
+        const href = `#${entry.target.getAttribute("id")}`
+        const targetLink = this.links.find((link) => {
+          return link.getAttribute("href") === href
+        })
+        if (entry.isIntersecting && entry.intersectionRatio >= 1) {
+          targetLink.classList.add("is-visible")
+          this.previousSection = entry.target.getAttribute("id")
+        } else {
+          targetLink.classList.remove("is-visible")
+        }
+        this.highlightFirstActive()
+      })
+    },
+    highlightFirstActive() {
+      const firstVisibleLink = this.container.querySelector(".is-visible")
+      this.links.forEach((link) => {
+        link.classList.remove("is-active")
+      })
+      if (firstVisibleLink) {
+        firstVisibleLink.classList.add("is-active")
+      }
+      if (!firstVisibleLink && this.previousSection) {
+        this.container
+          .querySelector(`a[href="#${this.previousSection}"]`)
+          .classList.add("is-active")
+      }
+    },
+
+    setUpObserver() {
+      this.observer = new IntersectionObserver(
+        this.handleObserver,
+        this.intersectionOptions
+      )
+    },
+    findLinksAndHeadings() {
+      this.links = [...this.container.querySelectorAll("a")]
+      this.headings = this.links.map((link) => {
+        const id = link.getAttribute("href").replaceAll("#", "")
+        return document.getElementById(id)
+      })
+    },
+    observeSections() {
+      this.headings.forEach((heading) => {
+        heading && this.observer.observe(heading)
+      })
+    },
+  }
+
+  Toc.init()
+}
+
+// 在此列出的符号都可以使用在 mdx 文件的标题中
+// 注意 < > 组成标签时需要escape 如 \<tag\>
+// `也需要 escape
+// 不需要对 - 符号进行替换 href允许出现
+const convertTitleToDataId = (title) =>
+  title
+    .replaceAll(".", "")
+    .replaceAll("`", "")
+    .replaceAll("!", "")
+    .replaceAll("@", "")
+    .replaceAll("#", "")
+    .replaceAll("$", "")
+    .replaceAll("%", "")
+    .replaceAll("^", "")
+    .replaceAll("&", "")
+    .replaceAll("*", "")
+    .replaceAll("(", "")
+    .replaceAll(")", "")
+    .replaceAll("+", "")
+    .replaceAll("=", "")
+    .replaceAll(",", "")
+    .replaceAll("?", "")
+    .replaceAll("/", "")
+    .replaceAll("<", "")
+    .replaceAll(">", "")
+    .replaceAll("|", "")
+    .replaceAll("\\", "")
+
+const convertTitleToHeadingId = (title) =>
+  title
+    .replaceAll("\\", "")
+    .replaceAll("/", "")
+    .replaceAll(".", "")
+    .replaceAll("`", "")
+    .replaceAll("~", "")
+    .replaceAll("!", "")
+    .replaceAll("@", "")
+    .replaceAll("#", "")
+    .replaceAll("$", "")
+    .replaceAll("%", "")
+    .replaceAll("^", "")
+    .replaceAll("&", "")
+    .replaceAll("*", "")
+    .replaceAll("(", "")
+    .replaceAll(")", "")
+    // .replaceAll('_', '') 允许出现 下划线
+    // .replaceAll('-', '') 允许出现 中线
+    .replaceAll("+", "")
+    .replaceAll("=", "")
+    .replaceAll("·", "")
+    .replaceAll("[", "")
+    .replaceAll("]", "")
+    .replaceAll("{", "")
+    .replaceAll("}", "")
+    .replaceAll(":", "")
+    .replaceAll(";", "")
+    .replaceAll("'", "")
+    .replaceAll('"', "")
+    .replaceAll("<", "")
+    .replaceAll(">", "")
+    .replaceAll("|", "")
+    .replaceAll(" ", "-")

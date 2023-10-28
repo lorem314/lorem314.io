@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 import { justStopPropagation } from "../utils/event"
 import { bp } from "../styled/GlobalStyle"
+import CloseIcon from "../svg/CloseIcon"
 
 const Wrapper = styled.div`
   align-self: stretch;
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
   width: 100%;
   margin: 1rem 0;
 
-  color: var(--page-content-text-color-1);
+  color: var(--content-text-color-1);
   background-color: var(--page-content-bg);
 
   display: flex;
@@ -31,6 +32,16 @@ const Wrapper = styled.div`
   > header {
     padding: 10px 1rem;
     background-color: var(--content-bg-0);
+
+    display: flex;
+    gap: 10px;
+    > .modal-closer {
+      opacity: 0.5;
+      --svg-icon-size: 24px;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   > .result {
@@ -46,6 +57,10 @@ const Wrapper = styled.div`
   > footer {
     background-color: var(--content-bg-0);
     padding: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    font-size: 87.5%;
   }
 
   @media (max-width: ${bp.laptop}px) {
@@ -63,13 +78,17 @@ const Wrapper = styled.div`
   }
 `
 
-const SiteSearchModal = () => {
+const SiteSearchModal = ({ onCloseModal = () => {} }) => {
   return (
     <Wrapper onClick={justStopPropagation}>
       <header>
         <input type="search" />
+        <button className="goast modal-closer" onClick={onCloseModal}>
+          <CloseIcon />
+        </button>
       </header>
       <div className="result">
+        <p>目前还在开发中...</p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero quod
           vitae exercitationem architecto ducimus culpa blanditiis dolorem
@@ -95,7 +114,11 @@ const SiteSearchModal = () => {
           Eius, voluptate natus?
         </p>
       </div>
-      <footer>footer</footer>
+      <footer>
+        <div>上下键选择</div>
+        <div>回车键确定</div>
+        <div>ESC键退出</div>
+      </footer>
     </Wrapper>
   )
 }

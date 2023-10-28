@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     border: 1px solid var(--ui-default-border-color);
     border-radius: 0.25rem;
     font-size: 92.5%;
-    color: var(--page-content-text-color-0);
+    color: var(--content-text-color-0);
     ${transition("color", "bdc", "bg")}
 
     &:hover {

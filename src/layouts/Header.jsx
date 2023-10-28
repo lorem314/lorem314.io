@@ -85,7 +85,7 @@ const Header = ({
   )
 }
 
-export default Header
+export default React.memo(Header)
 
 const getRightDrawerBreakPoint = (location) => {
   if (!location) return 0

@@ -5,6 +5,7 @@ import PostItem from "./PostItem"
 
 const Wrapper = styled.div`
   margin: 1rem 0;
+  padding: 0 10px;
 
   display: flex;
   flex-direction: column;

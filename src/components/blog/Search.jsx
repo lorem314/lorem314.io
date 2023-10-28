@@ -15,8 +15,8 @@ const Wrapper = styled.div`
 const Search = ({ value = "", onChange = () => {} }) => {
   return (
     <Wrapper>
-      <label className="page-content-title" htmlFor="blog-search-input">
-        搜索
+      <label className="page-content-title block" htmlFor="blog-search-input">
+        <span>搜索</span>
       </label>
       <input
         id="blog-search-input"

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { MDXProvider } from "@mdx-js/react"
 import styled from "styled-components"
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   background-color: var(--page-content-bg);
   ${transition("bg")}
 
-  font-size: 1.125rem;
+  font-size: 1rem;
   /* font-family: "FiraCode Regular"; */
   font-family: "Segoe-Regular";
 
@@ -53,7 +53,7 @@ const components = {
   // strong: (props) => <Strong {...props} />,
 }
 
-const Body = ({ body = null }) => {
+const Body = ({ body = null, articleKey = "" }) => {
   return (
     <Wrapper>
       <MDXProvider components={components}>

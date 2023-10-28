@@ -1,7 +1,9 @@
 import React from "react"
 import styled from "styled-components"
 
-const Wrapper = styled.ul`
+const Wrapper = styled.ul.attrs({
+  className: "tags",
+})`
   list-style: none;
   padding: 0;
   margin: 0.5rem 0;

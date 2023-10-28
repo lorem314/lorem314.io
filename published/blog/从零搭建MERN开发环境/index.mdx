@@ -1,0 +1,668 @@
+---
+title: "Re:从零搭建 MERN 开发环境"
+createdAt: "2022-07-03"
+tags: ["MongoDB", "Express", "React", "NodeJS", "Re:从零系列"]
+
+id: "a6c37aed0e569ce62d4664c61b101c35"
+---
+
+MERN，是指由 <u>M</u>ongoDB，<u>E</u>xpress，<u>R</u>eact 和 <u>N</u>odeJS 四种技术组成的全栈开发环境。
+
+使用 React 开发环境构建页面程序有很多选择，如官方提供了用于构建单页面程序的`create-react-app`，或是支持服务端渲染的`create-next-app`，或者是`Gatsby`。无论是哪一种工具，都集成好了开发 React 页面程序所需要用到的各种库，我们直接上手编写即可。
+
+本文将从零开始，安装构建 React 开发环境所需要用到的 npm 依赖包，一步一步地构建 React 开发环境，该开发环境有以下特性:
+
+- 支持热更新，代码文件保存时会自动刷新页面
+- 支持服务端渲染
+
+本文使用的 Node 版本为 `16.4.2`，npm 版本为 `7.19.1`。
+
+```shell
+node --version
+v16.4.2
+
+npm --version
+7.19.1
+```
+
+跟随本教程完成构建后，文件结构应该大致如下。
+
+```
+mern-dev-env
+├─ dist
+├─ node_modules
+├─ client
+│  ├─ core
+│  │  ├─ Home.jsx
+│  │  └─ Menu.jsx
+│  ├─ setting
+│  │  └─ Setting.jsx
+│  ├─ App.js
+│  ├─ main.js
+│  └─ MainRouter.js
+├─ server
+│  ├─ templates
+│  │  └─ html-index.js
+│  ├─ devBundle.js
+│  ├─ express.js
+│  └─ server.js
+├─ .babelrc
+├─ nodemon.json
+├─ package-lock.json
+├─ package.json
+├─ template.js
+├─ webpack.config.client.js
+├─ webpack.config.client.production.js
+└─ webpack.config.server.js
+```
+
+## 初始化项目文件夹
+
+新建文件夹 mern-dev-env，并用 `npm init` 命令初始化文件夹
+
+```shell
+mkdir mern-dev-env
+cd mern-dev-env
+npm init -y
+```
+
+之后会生成 package.json 文件。
+
+## 安装 dependencies
+
+接下来我们开始安装构建环境所需要的各种依赖包。
+
+可以将以下代码粘贴到 package.json 文件中，并执行 `npm install` 命令，会安装所有的依赖包；也可以随本文在之后的步骤中一个一个地安装。
+
+<div class="custom-code-title">mern-dev-env/package.json</div>
+
+```json title=package.json
+{
+  "name": "mern-dev-env",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  // highlight-start
+  "dependencies": {
+    "@hot-loader/react-dom": "16.13.0",
+    "express": "4.17.1",
+    "mongodb": "3.5.5",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-hot-loader": "4.12.20",
+    "react-router": "5.1.2",
+    "react-router-dom": "5.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "7.9.0",
+    "@babel/preset-env": "7.9.0",
+    "@babel/preset-react": "7.9.4",
+    "babel-loader": "8.1.0",
+    "nodemon": "2.0.2",
+    "webpack": "4.42.1",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-middleware": "3.7.2",
+    "webpack-hot-middleware": "2.25.0",
+    "webpack-node-externals": "1.7.2"
+  },
+  // highlight-end
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+
+<blockquote>
+  考虑到依赖包的稳定性和包之间的兼容性，本开发环境没有使用最新版本的代码库
+</blockquote>
+
+## 安装 Babel
+
+在编写前后端代码时，我们都会用到 JS 的 ES6 语法特性，所以需要使用 Babel 来将其转换为可兼容老版本浏览器和 NodeJS 引擎的通用 JS 代码，另外，也需要用它来转换编写 React 组件的 JSX 语法。
+
+```shell
+npm install --save-dev @babel/core@7.9.0 @babel/preset-env@7.9.0 babel-loader@8.1.0
+```
+
+- `@babel/core` 从名字就能看出，是 Babel 包的核心
+- `babel-loader` 用 webpack 打包时用到的 loader
+- `@babel/preset-env` 用于转换 ES6 语法
+- `@babel/preset-react` 用于转换 JSX
+
+为了实现热更新，我们还需要安装 `react-hot-loader`。
+
+```shell
+npm install react-hot-loader@4.12.20
+```
+
+每次代码文件保存时，会触发页面自动刷新。
+
+新建文件`.babelrc`文件，对 Babel 进行配置。
+
+<div class="custom-code-title">mern-dev-env / .babelrc</div>
+
+```json
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": ["react-hot-loader/babel"]
+}
+```
+
+## 安装 Webpack
+
+我们使用 Webpack 来打包代码。
+
+```shell
+npm install --save-dev webpack@4.42.1 webpack-cli@3.3.11 webpack-node-externals@1.7.2
+```
+
+若在之后执行命令中，若出现'webpack' 不是内部或外部命令,也不是可运行的程序或批处理文件错误，可尝试全局安装 webpack 和 webpack-cli。
+
+```shell
+npm install --location=global webpack@4.42.1 webpack-cli@3.3.11
+```
+
+在此我们没有使用 `webpack-dev-server`，我们通过 `webpack-dev-middleware` 和 `webpack-hot-middleware` 来模拟 `webpack-dev-server` 所做的一切。
+
+需要打包的有代码分为前端和后端两部分。因此我们需要创建两个配置文件。
+
+新建文件 `mern-dev-env / webpack.config.client.js`
+
+<div class="custom-code-title">mern-dev-env / webpack.config.client.js</div>
+
+```js
+const path = require("path")
+const webpack = require("webpack")
+
+const CURRENT_WORKING_DIR = process.cwd()
+
+const config = {
+  name: "browser",
+  mode: "development",
+  // highlight-next-line
+  devtool: "eval-source-map",
+  entry: [
+    "webpack-hot-middleware/client?reload=true",
+    // highlight-next-line
+    path.join(CURRENT_WORKING_DIR, "client/main.js"),
+  ],
+  output: {
+    // highlight-next-line
+    path: path.join(CURRENT_WORKING_DIR, "/dist"),
+    filename: "bundle.js",
+    publicPath: "/dist/",
+  },
+  module: {
+    rules: [
+      // highlight-start
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"],
+      },
+      // highlight-end
+    ],
+  },
+  plugins: [
+    // highlight-next-line
+    new webpack.HotModuleReplacementPlugin(),
+    // highlight-next-line
+    new webpack.NoEmitOnErrorsPlugin(),
+  ],
+  resolve: {
+    // highlight-next-line
+    alias: {
+      "react-dom": "@hot-loader/react-dom",
+    },
+  },
+}
+
+module.exports = config
+```
+
+下面对高亮的行逐一讲解：
+
+- devtool 指定了如何生成 source map，它提供了代码打包后和之前具体代码位置的对应关系，主要是帮助调错。
+- entry 指定了打包时的入口文件。
+  - 关于入口文件中加入 webpack-hot-middleware/client?reload=true 的[解释](https://sodocumentation.net/webpack/topic/4594/hot-module-replacement)
+- output 指定了打包完成后，生成的文件的输出位置。
+- publicPath 指定应用中如图像或字体等文件指定基本路径。
+- module 指定文件应使用哪些 loader 来处理哪些后缀的文件。
+- HotModuleReplacementPlugin 开启 react-hot-loader 的热加载
+- NoEmitOnErrorsPlugin 允许在出现编译错误时跳过。
+- 指定了别名，使用该配置打包时，将文件中的引入的 react-dom 包视为 @hot-loader/react-dom 包。
+  - 热更新只有必要在开发环境中使用，需要在代码中 import {render} from '@hot-loader/react-dom'，使用了别名后便可写成 import {render} from 'react-dom'，与生产环境中的代码写法统一。
+
+## 生产环境客户端配置
+
+<div class="custom-code-title">
+  mern-dev-env/webpack.config.client.production.js
+</div>
+
+```js
+const path = require("path")
+const webpack = require("webpack")
+
+const CURRENT_WORKING_DIR = process.cwd()
+
+const config = {
+  mode: "production",
+  entry: [path.join(CURRENT_WORKING_DIR, "client/main.js")],
+  output: {
+    path: path.join(CURRENT_WORKING_DIR, "/dist"),
+    filename: "bundle.js",
+    publicPath: "/dist/",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"],
+      },
+    ],
+  },
+}
+
+module.exports = config
+```
+
+相比开发环境，生产环境的配置简单了许多。
+
+## 开发环境服务端配置
+
+<div class="custom-code-title">mern-dev-env/webpack.config.server.js</div>
+
+```js
+const path = require("path")
+const webpack = require("webpack")
+const nodeExternals = require("webpack-node-externals")
+
+const CURRENT_WORKING_DIR = process.cwd()
+
+const config = {
+  name: "server",
+  entry: [path.join(CURRENT_WORKING_DIR, "./server/server.js")],
+  // highlight-next-line
+  target: "node",
+  output: {
+    path: path.join(CURRENT_WORKING_DIR, "/dist/"),
+    filename: "server.generated.js",
+    publicPath: "/dist/",
+    libraryTarget: "commonjs2",
+  },
+  // highlight-next-line
+  externals: [nodeExternals()],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ["babel-loader"],
+      },
+    ],
+  },
+}
+
+module.exports = config
+```
+
+在这里先不指定 mode 的值，之后会通过命令行传入。
+
+## 配置 babel
+
+安装 babel 包为开发依赖
+
+```shell
+
+```
+
+创建.babelrc 文件
+
+<div class="custom-code-title">mern-dev-env/.babelrc</div>
+
+```json
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "plugins": ["react-hot-loader/babel"]
+}
+```
+
+在此配置中，我们指定需要 Babel 来转译最新的 JavaScript 语法，支持 Node.js 环境中的代码以及 React/JSX 代码。 react-hot-loader 模块需要 react-hot-loader/babel 插件来编译 React 组件。
+
+## 配置 nodemon
+
+<div class="custom-code-title">mern-dev-env/nodemon.json</div>
+
+```json
+{
+  "verbose": false,
+  "watch": ["./server"],
+  "exec": "webpack --mode=development --config webpack.config.server.js && node ./dist/server.generated.js"
+}
+```
+
+watch 表示监听 server 文件夹，内容有改动时重新执行 exec 命令。当在命令行中执行 nodemon 时，会执行其中的 exec 对应的命令。即在开发模式下，使用 webpack.config.server.js 中的配置打包服务器代码，在 dist 下生成 server.generated.js 文件，并执行该 js 文件开启 http 服务。
+
+修改 package.json 文件，删除原有的 test 命令，添加 dev 命令
+
+<div class="custom-code-title">mern-dev-env/package.json</div>
+
+```json
+{
+  // ...
+  "scripts": {
+    // highlight-next-line
+    "dev": "nodemon"
+  }
+  // ...
+}
+```
+
+之后在根目录运行 npm run dev 时，会自动执行 nodemon 命令，其又会寻找 nodemon.json 文件执行其中的 exec 对应的命令，即使用 webpack.config.server.js 配置（开发环境）打包文件，完成后执行 server.generated.js。
+
+## 服务端代码
+
+在根目录创建 server 文件夹，并在其中创建 server.js 文件，这也是服务端代码打包时的起点。
+
+<div class="custom-code-title">mern-dev-env/server.js</div>
+
+```js
+import app from "./express"
+
+app.listen(8080, (err) => {
+  if (err) {
+    console.log(err)
+  }
+  console.info(`Server run`)
+})
+```
+
+从 express.js 文件中引入 app，并启动监听服务。
+
+接下来定义 express 的 app。
+
+## 使用 express
+
+在 server 文件夹中创建 express.js 文件。
+
+<div class="custom-code-title">mern-dev-env/express.js</div>
+
+```js
+import express from "express"
+
+import template from "./../template"
+
+const app = express()
+
+app.get("/", (req, res) => {
+  res.status(200).send(template())
+})
+
+export default app
+```
+
+简单的使用 express 定义一个 app，并在根路由返回 template。
+
+## html 模板
+
+在根目录创建 template.js 文件
+
+<div class="custom-code-title">mern-dev-env/template.js</div>
+
+```js
+export default () => {
+  return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>MERN-DEV-ENV</title>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script type="text/javascript" src="/dist/bundle.js"></script>
+    </body>
+    </html>`
+}
+```
+
+在 body 中创建两个标签，`div#root`为 react 加载 dom 时的根节点。另一个脚本标签使用 dist/bundle.js，这也是 webpack.config.client.js 的打包输出位置，也是 devMiddleware 的输出位置。两者需要保持一致。
+
+## 实现热更新
+
+在 server 文件夹下新建 devBundle.js 文件
+
+<div class="custom-code-title">mern-dev-env/server/devBundle.js</div>
+
+```js
+import webpack from "webpack"
+import webpackDevMiddleware from "webpack-dev-middleware"
+import webpackHotMiddleware from "webpack-hot-middleware"
+import webpackConfig from "./../webpack.config.client"
+
+const compile = (app) => {
+  if (process.env.NODE_ENV == "development") {
+    const compiler = webpack(webpackConfig)
+    const devMiddleware = webpackDevMiddleware(compiler, {
+      publicPath: webpackConfig.output.publicPath,
+    })
+    app.use(devMiddleware)
+    app.use(webpackHotMiddleware(compiler))
+  }
+}
+
+export default {
+  compile,
+}
+```
+
+引入相关依赖包，定义一个函数 compile，接收的参数为 app，由 express 初始化得来。当在开发环境下时，使用 webpack 函数和开发环境下的客户端配置文件生成 compiler，交由 webpackDevMiddleware, devMiddleware 需要 publicPath，即 devMiddleware 输出文件的位置。最后由 app 使用这两个中间件。
+
+## 渲染节点
+
+创建 client 文件夹
+
+<div class="custom-code-title">mern-dev-env/client/main.jsx</div>
+
+```jsx
+import React from "react"
+import { render } from "react-dom"
+
+import App from "./App"
+
+render(<App />, document.getElementById("root"))
+```
+
+此处引入的是 react-dom，在 webpack.config.client.js 的配置下打包时，react-dom 代表@hot-loader/react-dom。
+
+下面是 App.jsx
+
+<div class="custom-code-title">mern-dev-env/client/App.jsx</div>
+
+```jsx
+import React from "react"
+import { hot } from "react-hot-loader"
+
+const App = () => {
+  return (
+    <div>
+      <h1>hello world!</h1>
+    </div>
+  )
+}
+
+export default hot(module)(App)
+```
+
+作为 hot 函数的参数执行后再导出，以实现开发时热更新。
+
+## 设置服务端渲染
+
+## 使用 Router
+
+在 client 文件夹下创建 MainRouter.js 定义路由
+
+<div class="custom-code-title">mern-dev-env/client/MainRouter.jsx</div>
+
+```jsx
+import React from "react"
+import { Route, Switch } from "react-router-dom"
+
+import Home from "./home/Home"
+
+const MainRouter = () => {
+  return (
+    <div>
+      <Switch>
+        <Route exact path="/" component={Home} />
+      </Switch>
+    </div>
+  )
+}
+
+export default MainRouter
+```
+
+还需要修改 App 文件
+
+<div class="custom-code-title">mern-dev-env/client/App.jsx</div>
+
+```javascript
+import React from "react"
+import { hot } from "react-hot-loader"
+// highlight-next-line
+import { BrowserRouter } from "react-router-dom"
+
+import MainRouter from "./MainRouter"
+
+const App = () => {
+  return (
+    // highlight-start
+    <BrowserRouter>
+      <MainRouter />
+    </BrowserRouter>
+    // highlight-end
+  )
+}
+
+export default hot(module)(App)
+```
+
+还需要把 main.js 中的 render 改成 hydrate
+
+<div class="custom-code-title">mern-dev-env/client/main.jsx</div>
+
+```jsx
+import React from "react"
+// highlight-next-line
+import { hydrate } from "react-dom"
+
+import App from "./App"
+
+// highlight-next-line
+hydrate(<App />, document.getElementById("root"))
+```
+
+## 修改 express
+
+<div class="custom-code-title">mern-dev-env/server/express.js</div>
+
+```js
+import express from "express"
+import path from "path"
+// highlight-next-line
+import React from "react"
+// highlight-next-line
+import ReactDOMServer from "react-dom/server"
+// highlight-next-line
+import { StaticRouter } from "react-router-dom"
+
+import devBundle from "./devBundle"
+import template from "./../template"
+
+// highlight-next-line
+import MainRouter from "../client/MainRouter"
+
+const CURRENT_WORKING_DIR = process.cwd()
+
+const app = express()
+devBundle.compile(app)
+
+app.use("/dist", express.static(path.join(CURRENT_WORKING_DIR, "dist")))
+
+// highlight-start
+app.get("*", (req, res) => {
+  const context = {}
+  const markup = ReactDOMServer.renderToString(
+    <StaticRouter location={req.url} context={context}>
+      <MainRouter />
+    </StaticRouter>
+  )
+  if (context.url) {
+    return res.redirect(303, context.url)
+  }
+  res.status(200).send(
+    template({
+      markup: markup,
+    })
+  )
+})
+// highlight-end
+
+export default app
+```
+
+用星号匹配用户所有的路由请求，并由使用了 react-dom 中的 Switch 和 Router 组件的 MainRouter 来决定发送给客户那些代码。由于并不是真正的浏览器环境，而不是用 BrowserRouter，使用 StaticRouter，通过定义 context 来模拟浏览器环境。
+
+使用 ReactDOMServer 中的 renderToString 方法将组件渲染成 html，赋值给 markup，在返回给用户时，向 template.js 模板中插入该 markup。
+
+<div class="custom-code-title">mern-dev-env/template.js</div>
+
+```js
+export default ({ markup }) => {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MERN-DEV-ENV</title>
+</head>
+<body>
+  // highlight-next-line
+  <div id="root">${markup}</div>
+  <script type="text/javascript" src="/dist/bundle.js"></script>
+</body>
+</html>`
+}
+```
+
+## 总结
+
+至此，已完成 react 开发环境的搭建。
+
+通过热导出 App 组件实现前端的热更新，如 Home 组件有改动时，随着 home.js 文件的保存网页会自动刷新；使用 nodemon 的 watch 功能实现后端热更新，server 文件夹中的内容有改动时，重新执行 nodemon.json 中的 exec 命令，进而重新打包。

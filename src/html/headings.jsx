@@ -14,7 +14,7 @@ const cssHeadings = css`
   align-items: center;
   gap: 0.25em;
 
-  color: var(--page-content-text-color-0);
+  color: var(--content-text-color-0);
   ${transition("color", "fs", "mg")}
 
   > a.autolink-anchor {

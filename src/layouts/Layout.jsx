@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import styled from "styled-components"
 
 import Header from "./Header"
@@ -30,8 +30,9 @@ const Wrapper = styled.div`
       right: 0;
       padding: 0 10px;
       overflow: auto;
+      scroll-behavior: smooth;
 
-      color: var(--page-content-text-color-1);
+      color: var(--content-text-color-1);
       background-color: var(--content-bg-0);
       ${transition("color", "bg")}
 
@@ -86,8 +87,11 @@ const Layout = ({ children = null, hasRightDrawer = false, location }) => {
     }
   }, [isLeftDrawerAlwaysCollapsed])
 
-  const handleOpenLeftDrawer = () => setIsLeftDrawerOpen(true)
-  const handleCloseLeftDrawer = () => setIsLeftDrawerOpen(false)
+  const handleOpenLeftDrawer = useCallback(() => setIsLeftDrawerOpen(true), [])
+  const handleCloseLeftDrawer = useCallback(
+    () => setIsLeftDrawerOpen(false),
+    []
+  )
 
   return (
     <Wrapper
